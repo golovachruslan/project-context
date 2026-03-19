@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "project-context",
-      "source": "./",
+      "source": "./project-context",
       "description": "Maintain project context across sessions with structured markdown files, brainstorm-first workflow, context optimization (compact + organize), federated dependency graph for monorepos, and smart routing with session continuity.",
       "version": "2.8.0",
       "author": {
