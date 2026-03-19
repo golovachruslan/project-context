@@ -1,0 +1,32 @@
+{
+  "name": "project-context",
+  "version": "2.8.0",
+  "description": "Maintain project context across sessions with structured markdown files, brainstorm-first workflow, context optimization (compact + organize), federated dependency graph for monorepos, and smart routing with session continuity.",
+  "author": {
+    "name": "Ruslan Halavach",
+    "email": "golovachruslan@gmail.com"
+  },
+  "repository": "https://github.com/golovachruslan/project-context",
+  "license": "MIT",
+  "keywords": [
+    "context",
+    "memory",
+    "project-management",
+    "planning",
+    "brainstorming",
+    "session-continuity",
+    "smart-routing",
+    "monorepo",
+    "dependencies",
+    "dependency-graph",
+    "cross-project",
+    "state-management",
+    "optimize",
+    "compact",
+    "organize",
+    "archive",
+    "context-optimization"
+  ],
+  "commands": "./commands",
+  "skills": "./skills"
+}
