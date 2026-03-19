@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "project-context",
+  "owner": {
+    "name": "Ruslan Halavach",
+    "email": "golovachruslan@gmail.com"
+  },
+  "metadata": {
+    "description": "Structured project context management for Claude Code — session continuity, brainstorm-first workflow, context optimization, and smart routing."
+  },
+  "plugins": [
+    {
+      "name": "project-context",
+      "source": "./project-context",
+      "description": "Maintain project context across sessions with structured markdown files, brainstorm-first workflow, context optimization (compact + organize), federated dependency graph for monorepos, and smart routing with session continuity.",
+      "version": "2.8.0",
+      "author": {
+        "name": "Ruslan Halavach"
+      }
+    }
+  ]
+}
