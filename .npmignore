@@ -1,0 +1,7 @@
+src/
+*.ts
+!*.d.ts
+build.config.ts
+tsconfig.json
+.project-context/
+node_modules/
