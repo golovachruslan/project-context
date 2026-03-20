@@ -20,18 +20,21 @@ Separate brainstorming from planning. This skill captures decisions and resolves
 
 ## Workflow
 
-### 1. Read Existing Context
+### 1. MANDATORY — Read Project Context
 
-Check for project context to ask informed questions:
+**You MUST check for and read project context before brainstorming.** This ensures informed questions and prevents proposing approaches that conflict with existing architecture.
 
 ```bash
 ls .project-context/*.md 2>/dev/null
 ```
 
-If exists, read selectively:
-- **Always:** `brief.md` (project scope/goals — essential for scoping discussion)
-- **If feature involves architecture:** `architecture.md` (tech stack, existing design)
+If `.project-context/` exists:
+- **FIRST:** `state.md` (current position, active blockers, pending decisions — may directly affect what we can brainstorm)
+- **ALWAYS:** `brief.md` (project scope/goals — essential for scoping discussion)
+- **ALWAYS:** `architecture.md` (tech stack, existing design — prevents conflicting proposals)
 - **Defer:** `patterns.md` — only read if discussion reveals pattern-related gray areas
+
+If `.project-context/` does not exist, proceed without context but suggest running `/project-context:init` first.
 
 **Dependencies:** Only check `dependencies.json` if the feature description mentions integration, APIs, cross-project, or shared services. If it does, build a Dependency Digest (see `references/dependency-loading.md`) for Step 3.
 

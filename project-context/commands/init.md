@@ -178,9 +178,44 @@ python project-context/scripts/manage_context.py update-sections --file AGENTS.m
 
 If the script is not available, manually check for and add managed sections using HTML comment markers (`<!-- PROJECT-CONTEXT:START -->` / `<!-- PROJECT-CONTEXT:END -->`).
 
+The managed section in CLAUDE.md enforces a **mandatory initial context check** — instructing Claude to ALWAYS read `.project-context/` files (starting with `state.md` and `architecture.md`) before beginning any task. This ensures the agent understands the current project state, active blockers, architectural decisions, and established patterns before making changes.
+
+### Step 5.5: Set Up SessionStart Hook
+
+Add a `SessionStart` hook to `.claude/settings.json` that reminds the agent to check project context at the beginning of every session.
+
+**Check if `.claude/settings.json` exists:**
+
+```bash
+mkdir -p .claude
+cat .claude/settings.json 2>/dev/null || echo '{}'
+```
+
+**Add or update the SessionStart hook** in `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hook": "echo '⚠️ MANDATORY: Read .project-context/state.md and .project-context/architecture.md before starting any work. Run /project-context:next for smart routing.'"
+      }
+    ]
+  }
+}
+```
+
+**If hooks already exist**, merge the SessionStart hook into the existing hooks object without overwriting other hooks.
+
+This hook fires at the start of every Claude Code session, ensuring the agent is reminded to check project context before doing anything else. Combined with the CLAUDE.md instructions, this creates a two-layer enforcement:
+1. **SessionStart hook** — immediate reminder when session begins
+2. **CLAUDE.md** — persistent instruction that Claude reads at session start
+
 ### Step 6: Confirmation
 
 Display summary:
 - List created files (5 files + plans directory)
 - Show any updates to CLAUDE.md/AGENTS.md
+- Show SessionStart hook setup status
 - Suggest next steps: "Run `/project-context:brainstorm` to brainstorm your first feature"

@@ -34,30 +34,40 @@ MANAGED_SECTION_END = "<!-- PROJECT-CONTEXT:END -->"
 
 CLAUDE_MANAGED_CONTENT = """
 <!-- PROJECT-CONTEXT:START -->
-## Project Context
+## Project Context — MANDATORY Initial Check
 
-Always read `.project-context/` files when starting work:
+**BEFORE starting any task**, you MUST read `.project-context/` files to understand the project:
+
+1. **FIRST** — Read `state.md` to understand current position, blockers, and next action
+2. **THEN** — Read `architecture.md` to understand system design, tech stack, and flows
+3. **IF NEEDED** — Read `brief.md` (project goals), `patterns.md` (conventions), `progress.md` (work status)
+4. **IF EXISTS** — Check `dependencies.json` for cross-project dependencies (monorepo)
+
+**Do NOT skip this step.** Even for seemingly simple tasks, project context may reveal constraints, active blockers, or architectural decisions that affect your approach. If `.project-context/` exists, always check it first.
+
+**Quick reference:**
+- `state.md` — Current focus, blockers, next action (check FIRST)
+- `architecture.md` — System design, tech stack, key decisions
 - `brief.md` — Project goals, scope, requirements
-- `architecture.md` — System design, tech stack, flows
-- `state.md` — Current position, blockers, next action
+- `patterns.md` — Established coding patterns and learnings
 - `progress.md` — Completed/in-progress/upcoming work
-- `patterns.md` — Established patterns and learnings
-- `dependencies.json` — Cross-project dependencies (monorepo)
+- `dependencies.json` — Cross-project dependencies
 
 <!-- PROJECT-CONTEXT:END -->
 """
 
 AGENTS_MANAGED_CONTENT = """
 <!-- PROJECT-CONTEXT:START -->
-## Project Context
+## Project Context — MANDATORY Initial Check
 
-Before executing tasks, read `.project-context/` files:
-- `brief.md` — Project scope and goals
-- `architecture.md` — System design and flows
-- `state.md` — Current position and blockers
-- `progress.md` — Work status
-- `patterns.md` — Established patterns
-- `dependencies.json` — Cross-project dependencies (monorepo)
+**BEFORE executing any task**, you MUST read `.project-context/` files:
+
+1. **FIRST** — Read `state.md` (current position, blockers) and `architecture.md` (system design, flows)
+2. **THEN** — Read `patterns.md` (established conventions to follow)
+3. **IF NEEDED** — Read `brief.md` (project scope) and `progress.md` (work status)
+4. **IF EXISTS** — Check `dependencies.json` for cross-project boundaries
+
+**Do NOT skip this step.** Project context contains architectural decisions, active blockers, and patterns that directly affect task execution. Skipping context check leads to violations of established patterns and rework.
 
 <!-- PROJECT-CONTEXT:END -->
 """

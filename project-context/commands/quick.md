@@ -25,13 +25,20 @@ Streamlined path for ad-hoc tasks. Skips brainstorming phase, creates a minimal 
 
 ## Workflow
 
-### Step 1: Read Project Context (if exists)
+### Step 1: MANDATORY — Read Project Context
 
 ```bash
 ls .project-context/*.md 2>/dev/null
 ```
 
-If context exists, quickly read `architecture.md` and `patterns.md` to follow existing conventions.
+**If `.project-context/` exists, you MUST read context before proceeding:**
+1. **FIRST** — Read `state.md` to check for active blockers, current focus, and next action
+2. **THEN** — Read `architecture.md` and `patterns.md` to follow existing conventions
+3. If there are active blockers in `state.md`, inform the user before proceeding
+
+**Do NOT skip this step** even for simple tasks — project context may reveal constraints or blockers that affect your approach.
+
+If no `.project-context/` exists, proceed without context.
 
 ### Step 2: Clarify the Task
 

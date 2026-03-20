@@ -41,6 +41,24 @@ Using Task subagents allows parallel exploration of multiple codebase areas, red
 
 ---
 
+## Step 0: MANDATORY — Read Project Context
+
+**Before doing anything else**, check for and read project context:
+
+```bash
+ls .project-context/*.md 2>/dev/null
+```
+
+**If `.project-context/` exists:**
+1. **Read `state.md`** — Check current focus, active blockers, pending decisions, and next action
+2. **Read `architecture.md`** — Understand system design, tech stack, and key decisions
+3. **Read `patterns.md`** — Know established conventions to follow in the plan
+4. **Read `brief.md`** — Understand project goals and scope constraints
+
+This context MUST inform your planning. Plans that ignore existing architecture, violate established patterns, or conflict with active blockers will need rework.
+
+---
+
 Help me plan this feature or project. Use the `project-context:plan` skill to:
 
 1. Gather requirements through clarifying questions (never assume or guess)
