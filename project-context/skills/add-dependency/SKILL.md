@@ -29,6 +29,8 @@ One optional parameter: a path, git URL, or action keyword.
 
 ## Workflow
 
+**Context-First (mandatory).** Follow the [Context-First Protocol](../project-context/references/context-first-protocol.md) before any codebase scanning. Read `.project-context/` files and `dependencies.json` (if present) FIRST.
+
 ### 1. Detect Current Subproject
 
 ```bash

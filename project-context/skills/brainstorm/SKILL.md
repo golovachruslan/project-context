@@ -22,18 +22,19 @@ Separate brainstorming from planning. This skill captures decisions and resolves
 
 ### 1. Read Existing Context
 
+**Context-First (mandatory).** Follow the [Context-First Protocol](../project-context/references/context-first-protocol.md) before any codebase scanning. Read `.project-context/` files and `dependencies.json` (if present) FIRST.
+
 Check for project context to ask informed questions:
 
 ```bash
-ls .project-context/*.md 2>/dev/null
+ls .project-context/*.md .project-context/*.json 2>/dev/null
 ```
 
 If exists, read selectively:
 - **Always:** `brief.md` (project scope/goals — essential for scoping discussion)
+- **Always:** `dependencies.json` (if present) — build a Dependency Digest (see `references/dependency-loading.md`) for boundary awareness in Step 3. Do NOT skip based on keywords in the feature description — users may describe features that cross boundaries without mentioning "integration" or "API."
 - **If feature involves architecture:** `architecture.md` (tech stack, existing design)
 - **Defer:** `patterns.md` — only read if discussion reveals pattern-related gray areas
-
-**Dependencies:** Only check `dependencies.json` if the feature description mentions integration, APIs, cross-project, or shared services. If it does, build a Dependency Digest (see `references/dependency-loading.md`) for Step 3.
 
 ### 2. Understand the Feature
 

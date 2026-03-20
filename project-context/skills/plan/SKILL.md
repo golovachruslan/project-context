@@ -47,17 +47,19 @@ Create structured, executable implementation plans. **Plans should flow from loc
 
 ### 1. Read Project Context
 
-**Always do this first.** Launch a `context-reader` agent to produce a condensed project digest, or read files directly if Agent tool is unavailable:
+**Context-First (mandatory).** Follow the [Context-First Protocol](../project-context/references/context-first-protocol.md) before any codebase scanning. Read `.project-context/` files and `dependencies.json` (if present) FIRST. Do NOT use Glob, Grep, or Read on codebase files until you have completed this step.
+
+Launch a `context-reader` agent to produce a condensed project digest, or read files directly if Agent tool is unavailable:
 
 ```bash
-ls .project-context/*.md 2>/dev/null
+ls .project-context/*.md .project-context/*.json 2>/dev/null
 ```
 
 If context exists, read selectively:
 - **Always:** `brief.md` (goals/scope) + `state.md` (current position, existing plans)
+- **Always:** `dependencies.json` (if present) → build Dependency Digest (see `references/dependency-loading.md`). Do NOT skip based on whether the feature "seems" cross-project.
 - **If feature involves architecture:** `architecture.md` (tech stack, system design)
 - **If feature involves coding patterns:** `patterns.md` (established conventions)
-- **If cross-project:** `dependencies.json` → build Dependency Digest (see `references/dependency-loading.md`)
 - **Check:** `plans/*.md` for existing discussions/decisions on this topic
 
 Skip files not relevant to the feature being planned. You'll read `state.md` and `progress.md` again in Step 7, but their content from Step 1 is already in conversation context — use Edit directly without re-reading.

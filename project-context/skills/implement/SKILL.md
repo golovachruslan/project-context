@@ -59,6 +59,8 @@ hooks:
 
 # Implementation Skill
 
+**Context-First (mandatory).** The `/project-context:implement` command enforces the [Context-First Protocol](../project-context/references/context-first-protocol.md) at Step 3 — project context files and `dependencies.json` (if present) MUST be read before any code execution begins.
+
 This skill enforces context file synchronization when plans are implemented. It works alongside the `/project-context:implement` command.
 
 ## Agents

@@ -34,6 +34,8 @@ Update one or more `.project-context/` files based on different sources. The `--
 
 ## Workflow
 
+**Context-First (mandatory).** Follow the [Context-First Protocol](../project-context/references/context-first-protocol.md) before any codebase scanning. Read `.project-context/` files and `dependencies.json` (if present) FIRST.
+
 ### Step 1: Verify Context Exists
 
 ```bash
