@@ -88,17 +88,20 @@ Options:
 
 ### Step 3: Read Project Context
 
+**Context-First (mandatory).** Follow the [Context-First Protocol](../skills/project-context/references/context-first-protocol.md). This step MUST complete before Step 5 (Execute). Do NOT begin implementation until context is loaded.
+
 **Launch a `context-reader` agent** to produce a condensed project digest covering architecture, patterns, state, and dependencies.
 
 The digest is passed to each `task-implementer` agent so they don't re-read the same files.
 
 **If Agent tool is unavailable**, read directly:
+- `.project-context/brief.md` — Project scope and goals
 - `.project-context/architecture.md` — Follow existing patterns
 - `.project-context/patterns.md` — Respect conventions
 - `.project-context/state.md` — Current position
-- `.project-context/dependencies.json` — Cross-project boundaries (if present)
+- `.project-context/dependencies.json` — Cross-project boundaries (if present — ALWAYS read, do not skip)
 
-If `dependencies.json` exists, the digest should include dependency info for detecting when tasks touch integration boundaries.
+If `dependencies.json` exists, the digest should include dependency info for detecting when tasks touch integration boundaries. When Boundary Detection flags a dependency, also load that dependency's cached context files (`brief.md`, `architecture.md`) — see `dependency-loading.md` Steps 1-3.
 
 ### Step 4: Initialize Task Tracking
 

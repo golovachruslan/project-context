@@ -46,6 +46,8 @@ Validate plans to ensure they are complete, actionable, and ready for implementa
 
 ## Workflow
 
+**Context-First (mandatory).** Follow the [Context-First Protocol](../project-context/references/context-first-protocol.md) before any codebase scanning. Read `.project-context/` files and `dependencies.json` (if present) FIRST.
+
 1. **Locate the plan** - Use provided path or find most recent:
    ```bash
    ls -t .project-context/plans/*.md | head -1

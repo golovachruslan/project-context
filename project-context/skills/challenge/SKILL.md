@@ -60,6 +60,8 @@ If `.project-context/` doesn't exist, skill works standalone.
 
 ### 1. Gather Context
 
+**Context-First (mandatory).** Follow the [Context-First Protocol](../project-context/references/context-first-protocol.md) before any codebase scanning. Read `.project-context/` files and `dependencies.json` (if present) FIRST.
+
 **Launch a `context-reader` agent** to produce a condensed project digest:
 - The agent reads `.project-context/` files (architecture.md, patterns.md, brief.md, dependencies.json)
 - Returns a compact digest with Tech Stack, Key Patterns, Current State, Active Dependencies
@@ -67,11 +69,11 @@ If `.project-context/` doesn't exist, skill works standalone.
 
 **If Agent tool is unavailable**, fall back to reading files directly:
 ```bash
-ls .project-context/*.md 2>/dev/null
+ls .project-context/*.md .project-context/*.json 2>/dev/null
 ```
 Then read architecture.md, patterns.md, brief.md, and dependencies.json manually.
 
-When reading files manually, read selectively based on what's being challenged:
+When reading files manually, always read `brief.md` and `dependencies.json` (if present), then read selectively based on what's being challenged:
 
 | Challenge Target | Read |
 |-----------------|------|
@@ -81,7 +83,7 @@ When reading files manually, read selectively based on what's being challenged:
 | Performance/scaling | `architecture.md` |
 | Integration/API | `architecture.md` + `dependencies.json` |
 
-Only load `dependencies.json` + build Dependency Digest (see `references/dependency-loading.md`) when the challenge involves cross-project boundaries or integration points.
+When `dependencies.json` exists, ALWAYS read it, build a Dependency Digest, run Boundary Detection, and load context files (`brief.md`, `architecture.md`) for any boundary-detected dependencies (see `references/dependency-loading.md` Steps 1-3). Do NOT skip based on whether the challenge "seems" cross-project — boundary issues may not be obvious upfront.
 
 **Identify what's being challenged:**
 - Recent plan discussed in conversation

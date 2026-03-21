@@ -27,11 +27,17 @@ Streamlined path for ad-hoc tasks. Skips brainstorming phase, creates a minimal 
 
 ### Step 1: Read Project Context (if exists)
 
+**Context-First (mandatory).** Follow the [Context-First Protocol](../skills/project-context/references/context-first-protocol.md) before any codebase scanning. Read `.project-context/` files and `dependencies.json` (if present) FIRST.
+
 ```bash
-ls .project-context/*.md 2>/dev/null
+ls .project-context/*.md .project-context/*.json 2>/dev/null
 ```
 
-If context exists, quickly read `architecture.md` and `patterns.md` to follow existing conventions.
+If context exists, read:
+- `brief.md` — project scope and goals
+- `architecture.md` — tech stack and system design
+- `patterns.md` — established conventions to follow
+- `dependencies.json` (if present) — build a Dependency Digest and run Boundary Detection (see `dependency-loading.md`). If a boundary is detected, also load that dependency's cached context files (`brief.md`, `architecture.md`) for boundary awareness even in quick mode
 
 ### Step 2: Clarify the Task
 

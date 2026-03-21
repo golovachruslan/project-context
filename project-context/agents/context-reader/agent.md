@@ -39,8 +39,9 @@ You are a context reader agent. Your job is to read project context files and pr
 **Process:**
 1. Check which `.project-context/` files exist using Glob
 2. Read the specified files (or all if not specified)
-3. If `dependencies.json` exists, include a dependency summary
-4. Condense into the digest format below
+3. If `dependencies.json` exists, ALWAYS include a Dependency Digest with upstream/downstream summary — this is not optional
+4. Run Boundary Detection against the focus area (if provided). For boundary-detected dependencies, also read their cached context files: local deps at `<path>/.project-context/brief.md` and `architecture.md`, git deps at `.project-context/.deps-cache/<project>/brief.md` and `architecture.md`. Include key details in the digest under "Active Dependencies"
+5. Condense into the digest format below
 
 **Files to read (when available):**
 - `.project-context/brief.md` — Project goals, scope, constraints

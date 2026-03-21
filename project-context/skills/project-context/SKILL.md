@@ -20,6 +20,8 @@ Provide informed responses about project state by reading structured context fil
 
 ## Workflow
 
+**Context-First (mandatory).** Follow the [Context-First Protocol](references/context-first-protocol.md) before any codebase scanning. Read `.project-context/` files and `dependencies.json` (if present) FIRST.
+
 ### 1. Check for Context Files
 
 ```bash

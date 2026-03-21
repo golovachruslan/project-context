@@ -11,13 +11,15 @@ Research and answer questions about the current project by combining structured 
 
 ### 1. Gather Context Layer (project-context files)
 
+**Context-First (mandatory).** Follow the [Context-First Protocol](../project-context/references/context-first-protocol.md) before any codebase scanning. Read `.project-context/` files and `dependencies.json` (if present) FIRST. You MUST complete this step before proceeding to Step 2.
+
 Check for `.project-context/` files first — they provide high-level project knowledge:
 
 ```bash
-ls .project-context/*.md 2>/dev/null
+ls .project-context/*.md .project-context/*.json 2>/dev/null
 ```
 
-If found, read files relevant to the question:
+If found, always read `brief.md` and `dependencies.json` (if present), then read additional files relevant to the question:
 
 | Question About | Read |
 |---------------|------|
@@ -28,13 +30,13 @@ If found, read files relevant to the question:
 | Code conventions, learnings | `patterns.md` |
 | Dependencies, integrations, cross-project | `dependencies.json` + relevant dep's cached `brief.md` / `architecture.md` |
 
-When the question involves integration topics or a concept matching a dependency's `what` field (e.g., "how does auth work?" and upstream dep provides "Auth API types, JWT schemas"), also load that dependency's context. See `project-context/skills/project-context/references/dependency-loading.md` for loading rules (selective loading, never load dep's state/progress).
+When `dependencies.json` exists, always build a Dependency Digest, run Boundary Detection, and load context files (`brief.md`, `architecture.md`) for any boundary-detected dependencies (see `project-context/skills/project-context/references/dependency-loading.md` Steps 1-3). This must happen before any codebase scanning in Step 2.
 
 Also check for `CLAUDE.md`, `README.md`, or similar project docs at the repo root — these often contain build commands, architecture notes, and conventions.
 
 If no context files exist, skip to step 2. Do NOT suggest initialization — focus on answering the question.
 
-### 2. Research the Codebase
+### 2. Research the Codebase (only after Step 1 is complete)
 
 Use targeted codebase exploration to find the answer. For complex questions, launch a `context-reader` agent and a `codebase-explorer` agent in parallel — context-reader provides project background while codebase-explorer digs into the code.
 
