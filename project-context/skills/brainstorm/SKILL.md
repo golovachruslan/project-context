@@ -32,7 +32,7 @@ ls .project-context/*.md .project-context/*.json 2>/dev/null
 
 If exists, read selectively:
 - **Always:** `brief.md` (project scope/goals — essential for scoping discussion)
-- **Always:** `dependencies.json` (if present) — build a Dependency Digest (see `references/dependency-loading.md`) for boundary awareness in Step 3. Do NOT skip based on keywords in the feature description — users may describe features that cross boundaries without mentioning "integration" or "API."
+- **Always:** `dependencies.json` (if present) — build a Dependency Digest, run Boundary Detection, and load context files (`brief.md`, `architecture.md`) for any boundary-detected dependencies (see `references/dependency-loading.md` Steps 1-3). Do NOT skip based on keywords in the feature description — users may describe features that cross boundaries without mentioning "integration" or "API."
 - **If feature involves architecture:** `architecture.md` (tech stack, existing design)
 - **Defer:** `patterns.md` — only read if discussion reveals pattern-related gray areas
 

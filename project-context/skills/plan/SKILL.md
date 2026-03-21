@@ -57,7 +57,7 @@ ls .project-context/*.md .project-context/*.json 2>/dev/null
 
 If context exists, read selectively:
 - **Always:** `brief.md` (goals/scope) + `state.md` (current position, existing plans)
-- **Always:** `dependencies.json` (if present) → build Dependency Digest (see `references/dependency-loading.md`). Do NOT skip based on whether the feature "seems" cross-project.
+- **Always:** `dependencies.json` (if present) → build Dependency Digest, run Boundary Detection, and load context files (`brief.md`, `architecture.md`) for any boundary-detected dependencies (see `references/dependency-loading.md` Steps 1-3). Do NOT skip based on whether the feature "seems" cross-project.
 - **If feature involves architecture:** `architecture.md` (tech stack, system design)
 - **If feature involves coding patterns:** `patterns.md` (established conventions)
 - **Check:** `plans/*.md` for existing discussions/decisions on this topic

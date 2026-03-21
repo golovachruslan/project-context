@@ -34,8 +34,12 @@ When `dependencies.json` exists, ALWAYS:
 1. Read it
 2. Build a Dependency Digest (see `dependency-loading.md` Step 1)
 3. Run Boundary Detection (see `dependency-loading.md` Step 2) against the current task
+4. **Load related dependency context** (see `dependency-loading.md` Step 3) — when a boundary is detected, read the dependency's cached context files (`brief.md`, `architecture.md`) before scanning the codebase. For local deps read from `<path>/.project-context/`, for git deps read from `.project-context/.deps-cache/<project>/`
+5. Check for stale caches (see `dependency-loading.md` Step 4) — warn if git dep cache is >7 days old
 
 Do NOT conditionally skip based on keyword matching in the user's request. Users may describe features that cross boundaries without using terms like "integration" or "API."
+
+**Loading dep context is part of the context-first phase, not the codebase scanning phase.** Dependency context files are project-context files — they must be read before any Glob/Grep/Read on codebase files.
 
 ## Agent Callers
 

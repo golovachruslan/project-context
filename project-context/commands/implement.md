@@ -101,7 +101,7 @@ The digest is passed to each `task-implementer` agent so they don't re-read the 
 - `.project-context/state.md` — Current position
 - `.project-context/dependencies.json` — Cross-project boundaries (if present — ALWAYS read, do not skip)
 
-If `dependencies.json` exists, the digest should include dependency info for detecting when tasks touch integration boundaries.
+If `dependencies.json` exists, the digest should include dependency info for detecting when tasks touch integration boundaries. When Boundary Detection flags a dependency, also load that dependency's cached context files (`brief.md`, `architecture.md`) — see `dependency-loading.md` Steps 1-3.
 
 ### Step 4: Initialize Task Tracking
 

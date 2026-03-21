@@ -40,11 +40,13 @@ A **boundary is crossed** when the current work involves:
 
 When a boundary is detected, flag it explicitly so it informs the rest of the workflow.
 
-## Step 3: Selective Context Loading
+## Step 3: Selective Context Loading (Mandatory When Boundary Detected)
 
-Load dep context **only for relevant dependencies**, not all of them.
+When Boundary Detection (Step 2) flags a dependency, you MUST load that dependency's context files before scanning the codebase. This is part of the context-first phase — dependency context files are project-context files, not codebase files.
 
-**If `description` is present:** the digest already provides basic orientation — skip loading `brief.md` unless the task requires detailed architectural understanding (internal structure, data flow, decision rationale).
+Load dep context **for dependencies where a boundary was detected**. If no boundary was detected for any dependency, this step may be skipped.
+
+**If `description` is present:** the digest already provides basic orientation — you may skip `brief.md` if the task only requires surface-level boundary awareness. However, ALWAYS load `architecture.md` for boundary-detected deps to understand their internal structure and contracts.
 
 **For local path dependencies:**
 ```

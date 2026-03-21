@@ -30,7 +30,7 @@ If found, always read `brief.md` and `dependencies.json` (if present), then read
 | Code conventions, learnings | `patterns.md` |
 | Dependencies, integrations, cross-project | `dependencies.json` + relevant dep's cached `brief.md` / `architecture.md` |
 
-When `dependencies.json` exists, always build a Dependency Digest and run Boundary Detection (see `project-context/skills/project-context/references/dependency-loading.md`). If the question involves a concept matching a dependency's `what` field, also load that dependency's context.
+When `dependencies.json` exists, always build a Dependency Digest, run Boundary Detection, and load context files (`brief.md`, `architecture.md`) for any boundary-detected dependencies (see `project-context/skills/project-context/references/dependency-loading.md` Steps 1-3). This must happen before any codebase scanning in Step 2.
 
 Also check for `CLAUDE.md`, `README.md`, or similar project docs at the repo root — these often contain build commands, architecture notes, and conventions.
 

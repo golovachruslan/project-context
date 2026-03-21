@@ -37,7 +37,7 @@ If context exists, read:
 - `brief.md` — project scope and goals
 - `architecture.md` — tech stack and system design
 - `patterns.md` — established conventions to follow
-- `dependencies.json` (if present) — build a Dependency Digest (see `dependency-loading.md`) for boundary awareness even in quick mode
+- `dependencies.json` (if present) — build a Dependency Digest and run Boundary Detection (see `dependency-loading.md`). If a boundary is detected, also load that dependency's cached context files (`brief.md`, `architecture.md`) for boundary awareness even in quick mode
 
 ### Step 2: Clarify the Task
 

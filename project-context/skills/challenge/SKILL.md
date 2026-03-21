@@ -83,7 +83,7 @@ When reading files manually, always read `brief.md` and `dependencies.json` (if 
 | Performance/scaling | `architecture.md` |
 | Integration/API | `architecture.md` + `dependencies.json` |
 
-When `dependencies.json` exists, ALWAYS read it and build a Dependency Digest (see `references/dependency-loading.md`). Do NOT skip based on whether the challenge "seems" cross-project — boundary issues may not be obvious upfront.
+When `dependencies.json` exists, ALWAYS read it, build a Dependency Digest, run Boundary Detection, and load context files (`brief.md`, `architecture.md`) for any boundary-detected dependencies (see `references/dependency-loading.md` Steps 1-3). Do NOT skip based on whether the challenge "seems" cross-project — boundary issues may not be obvious upfront.
 
 **Identify what's being challenged:**
 - Recent plan discussed in conversation
