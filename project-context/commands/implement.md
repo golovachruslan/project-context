@@ -303,6 +303,22 @@ Each `task-implementer` agent receives:
 - The condensed project context digest
 - Deviation rules and locked decisions from the plan
 
+### Step 9: Recommend Next Step
+
+After the summary, launch a `next-step-recommender` agent with:
+- **Completed skill:** `implement`
+- **Summary:** Brief description of what was implemented (plan name, phases completed, key files)
+
+Append the agent's recommendation to your output:
+
+```
+**Recommended next step:**
+→ [NEXT_STEP from agent]
+  [REASON from agent]
+```
+
+If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+
 ## Best Practices
 
 - **Confirm before starting** — Never implement without user approval

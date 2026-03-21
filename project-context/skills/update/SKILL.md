@@ -251,6 +251,22 @@ Update when: Feature completed, milestone reached, current work changes, blocker
 ### state.md
 Update when: Current focus changes, active plan changes, new blockers, session context shifts.
 
+## Step 7: Recommend Next Step
+
+After the summary and any propagation/commit steps, launch a `next-step-recommender` agent with:
+- **Completed skill:** `update`
+- **Summary:** Brief description of what was updated (files modified, source mode used)
+
+Append the agent's recommendation to your output:
+
+```
+**Recommended next step:**
+→ [NEXT_STEP from agent]
+  [REASON from agent]
+```
+
+If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+
 ## Edge Cases & Examples
 
 For edge case templates (uncertain categorization, conflicting info, large volumes) and worked examples (feature implementation, debugging session, architecture decision), see `references/update-examples.md`.

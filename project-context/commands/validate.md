@@ -158,6 +158,22 @@ Output a validation report:
 2. Add patterns to patterns.md based on recent work
 ```
 
+### Step 7: Recommend Next Step
+
+Launch a `next-step-recommender` agent with:
+- **Completed skill:** `validate`
+- **Summary:** Brief description of validation results (issues found, warnings, all-clear)
+
+Append the agent's recommendation to your output (only if issues were found):
+
+```
+**Recommended next step:**
+→ [NEXT_STEP from agent]
+  [REASON from agent]
+```
+
+If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+
 ## Validation Levels
 
 ### Critical Issues (must fix)

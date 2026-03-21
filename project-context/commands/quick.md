@@ -80,6 +80,22 @@ Done! Here's what changed:
 - `subagent_type=Explore` for quick codebase reconnaissance
 - Run independent verification steps as background tasks (`run_in_background=true`)
 
+### Step 6: Recommend Next Step
+
+Launch a `next-step-recommender` agent with:
+- **Completed skill:** `quick`
+- **Summary:** Brief description of what was done (task, files changed)
+
+Append the agent's recommendation to your output (only if the agent returns a recommendation):
+
+```
+**Recommended next step:**
+→ [NEXT_STEP from agent]
+  [REASON from agent]
+```
+
+If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+
 ## Rules
 
 - **No files saved** to `.project-context/plans/` — this is ephemeral

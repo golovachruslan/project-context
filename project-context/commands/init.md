@@ -183,4 +183,19 @@ If the script is not available, manually check for and add managed sections usin
 Display summary:
 - List created files (5 files + plans directory)
 - Show any updates to CLAUDE.md/AGENTS.md
-- Suggest next steps: "Run `/project-context:brainstorm` to brainstorm your first feature"
+
+### Step 7: Recommend Next Step
+
+Launch a `next-step-recommender` agent with:
+- **Completed skill:** `init`
+- **Summary:** Project context initialized with 5 files
+
+Append the agent's recommendation to your output:
+
+```
+**Recommended next step:**
+→ [NEXT_STEP from agent]
+  [REASON from agent]
+```
+
+If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.

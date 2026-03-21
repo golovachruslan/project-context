@@ -191,6 +191,22 @@ Confirm state.md and progress.md reference the plan. The PostToolUse hook enforc
 
 **Only after completing Steps 7a-7e should you present the final summary.**
 
+### 8. Recommend Next Step
+
+After the summary, launch a `next-step-recommender` agent with:
+- **Completed skill:** `plan`
+- **Summary:** Brief description of the plan saved (name, path, phase count)
+
+Append the agent's recommendation to your output:
+
+```
+**Recommended next step:**
+→ [NEXT_STEP from agent]
+  [REASON from agent]
+```
+
+If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+
 ## Reference
 
 - `references/planning-templates.md` — Full plan templates

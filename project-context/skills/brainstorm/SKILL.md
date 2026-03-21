@@ -133,6 +133,22 @@ Options:
 
 If saving, append to the plan file in `.project-context/plans/` or create a new one.
 
+### 8. Recommend Next Step
+
+Launch a `next-step-recommender` agent with:
+- **Completed skill:** `brainstorm`
+- **Summary:** Brief description of decisions locked and feature discussed
+
+Append the agent's recommendation to your output:
+
+```
+**Recommended next step:**
+→ [NEXT_STEP from agent]
+  [REASON from agent]
+```
+
+If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+
 ## Key Principles
 
 1. **Never expand scope** — Discuss HOW, not WHETHER to add more

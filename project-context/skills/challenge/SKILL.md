@@ -156,6 +156,22 @@ Would you like me to log this challenge to `.project-context/plans/challenge-[to
 
 End with: "Which of these should we address before proceeding?"
 
+### 7. Recommend Next Step
+
+Launch a `next-step-recommender` agent with:
+- **Completed skill:** `challenge`
+- **Summary:** Brief description of what was challenged and severity of concerns found
+
+Append the agent's recommendation to your output:
+
+```
+**Recommended next step:**
+→ [NEXT_STEP from agent]
+  [REASON from agent]
+```
+
+If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+
 ## Output Format
 
 Three modes: **Standard** (all six critics, detailed), **Quick** (`--quick`, top 3 concerns only), **Brutal** (`--brutal`, assume flawed + domain-specific critics). See `references/output-formats.md` for full templates and challenge log format.
