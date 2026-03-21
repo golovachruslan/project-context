@@ -273,6 +273,22 @@ User can approve some changes and reject others. Apply only approved changes.
 ### Files already have subdirectories
 Respect existing structure. Don't re-split already-split files. Check if existing detail files need compacting themselves.
 
+### Step 8: Recommend Next Step
+
+After the summary, launch a `next-step-recommender` agent with:
+- **Completed skill:** `optimize`
+- **Summary:** Brief description of optimization performed (compact/organize/both, size reduction)
+
+Append the agent's recommendation to your output:
+
+```
+**Recommended next step:**
+→ [NEXT_STEP from agent]
+  [REASON from agent]
+```
+
+If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+
 ## Integration Points
 
 This skill is suggested by:

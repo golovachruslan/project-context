@@ -83,3 +83,19 @@ After resuming, update state.md with current session info and remove or archive 
 - Update "Last Session" date
 - Update "Focus" to current work
 - Optionally delete continue.md (it's served its purpose)
+
+### Step 7: Recommend Next Step
+
+Launch a `next-step-recommender` agent with:
+- **Completed skill:** `resume`
+- **Summary:** Brief description of session resumed (what was the focus, what continue.md indicated)
+
+Append the agent's recommendation to your status presentation:
+
+```
+**Recommended next step:**
+→ [NEXT_STEP from agent]
+  [REASON from agent]
+```
+
+If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
