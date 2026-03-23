@@ -92,9 +92,18 @@ This will help me [why it matters].
 
 Refer to `references/question-patterns.md` for scenario-specific patterns.
 
-### 4. Create Executable Plan
+### 4. Choose Template and Create Plan
 
-Use templates from `references/planning-templates.md`. Key structure:
+Select the right template from `references/planning-templates.md` based on the planning context:
+
+- **ERD Template** — when the user mentions PRD, ERD, engineering requirements, or needs data models + API contracts + sequence diagrams. The ERD template includes schema details, API contracts, component diagrams, security/performance sections, and testing strategy. Use this for milestone-level technical design.
+- **Feature Plan Template** — standard single-feature planning (1-4 weeks)
+- **Quick Plan Template** — small tasks, spikes, POCs (<1 week)
+- **PRD Summary Template** — when initializing context from a PRD, capture milestones and success metrics in brief.md
+
+When the user says "create an ERD" or "design the technical implementation", default to the ERD template. When the user references a PRD, check if brief.md should be updated with PRD Summary info.
+
+Key structure for the default Feature Plan:
 
 ```markdown
 # [Feature Name] Plan

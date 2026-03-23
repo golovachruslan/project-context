@@ -45,6 +45,237 @@ Maintain project context across Claude Code sessions with structured documentati
 /project-context:validate
 ```
 
+## Workflow Examples
+
+Project Context supports the full development lifecycle. Below are four common flows showing which commands to use at each stage.
+
+### Flow 1: PRD → ERD → Implementation (Feature Delivery)
+
+The most structured flow — used when your team receives a Product Requirements Document (PRD) with milestones and needs to design, plan, and ship features. Works for both new and existing projects.
+
+```
+PRD arrives → Capture in context → Review & Brainstorm → ERD (per milestone) → Implement → Update
+```
+
+**Step 1: Capture the PRD in project context**
+
+For a **new project** — initialize context from scratch:
+```bash
+/project-context:init
+# During the wizard, populate brief.md with PRD goals, scope, and milestones
+# Paste or summarize the PRD when prompted for project goals
+```
+
+For an **existing project** — update brief.md with the new PRD scope:
+```bash
+/project-context:update brief --input
+# Add PRD milestones, success metrics, and scope to the existing brief
+# The planner will use the PRD Summary template to structure this
+# Existing project goals and architecture are preserved
+```
+
+**Step 2: Review PRD and lock decisions with brainstorm**
+```bash
+/project-context:brainstorm
+# "We received a PRD for user authentication. It has 3 milestones:
+#  M1: Email/password auth, M2: OAuth providers, M3: MFA.
+#  Let's review M1 scope and identify gray areas."
+
+# For existing projects, brainstorm also considers:
+#  - How new features fit into existing architecture
+#  - Which existing components need changes vs new ones
+#  - Backward compatibility and migration concerns
+
+# Brainstorm identifies ambiguities:
+#  - Session storage: Redis vs JWT?
+#  - Password policy: What rules?
+#  - Rate limiting: On login endpoint?
+# You lock decisions before moving to planning.
+```
+
+**Step 3: Create ERD (Engineering Requirements Document) for the milestone**
+```bash
+/project-context:plan
+# "Create an ERD for Milestone 1: Email/password authentication.
+#  Cover: data models, API contracts, component architecture,
+#  sequence diagrams, and security considerations."
+
+# The planner uses your locked decisions from brainstorm
+# and creates a detailed technical design saved to:
+#   .project-context/plans/m1-email-auth.md
+```
+
+> **Tip:** When you ask the planner to "create an ERD" or "design the technical implementation", it automatically uses the ERD template — which includes data models, API contracts, sequence diagrams, and security/performance sections. See the [ERD Template](#erd-engineering-requirements-document-template) in the planning templates.
+
+**Step 4: Challenge the ERD**
+```bash
+/project-context:challenge
+# Six Critics review your ERD:
+#  - Skeptic: "JWT without refresh tokens means forced re-login"
+#  - Chaos Engineer: "What if Redis goes down mid-session?"
+#  - Architect: "Password hashing should use bcrypt, not SHA-256"
+# Fix issues before implementation.
+```
+
+**Step 5: Implement the plan**
+```bash
+/project-context:implement
+# Executes tasks from the ERD plan
+# Multi-agent parallel execution for independent tasks
+# Context files auto-sync on completion
+```
+
+**Step 6: Capture learnings and move to next milestone**
+```bash
+/project-context:update --chat
+# Extracts decisions, patterns, and progress from the session
+# Updates architecture.md with new diagrams
+# Updates progress.md with completed M1 tasks
+
+# Repeat Steps 2-6 for M2 and M3
+```
+
+**Step 7: Pause/resume between milestones**
+```bash
+/project-context:pause
+# Saves full session state to continue.md
+
+# Next session (or next engineer):
+/project-context:resume
+# Restores context, shows where you left off
+```
+
+---
+
+### Flow 2: Greenfield Project
+
+Starting a new project from scratch — no existing code, just an idea or rough requirements.
+
+```
+Init → Brainstorm → Plan architecture → Implement foundation → Iterate
+```
+
+```bash
+# 1. Initialize project context
+/project-context:init
+# Fill in brief.md with project vision, goals, and scope boundaries
+
+# 2. Brainstorm architecture decisions
+/project-context:brainstorm
+# "We're building a real-time collaboration tool.
+#  Discuss: WebSocket vs SSE, database choice, auth strategy."
+# Lock: WebSocket for real-time, PostgreSQL + Redis, JWT auth
+
+# 3. Plan the foundation
+/project-context:plan
+# Creates phased plan: project scaffolding → core data models →
+# API layer → real-time layer → frontend shell
+
+# 4. Challenge the architecture
+/project-context:challenge
+# Catch issues early before writing code
+
+# 5. Implement phase by phase
+/project-context:implement
+# After each phase: /project-context:update --chat
+
+# 6. As patterns emerge, they're captured automatically
+# Check with: /project-context:validate
+```
+
+---
+
+### Flow 3: Bug Fix / Incident Response
+
+Fast-paced flow for triaging, fixing, and learning from bugs or production incidents.
+
+```
+Triage → Investigate → Fix → Post-mortem → Update
+```
+
+```bash
+# 1. Quick mode for urgent fixes (skips brainstorm, no saved plan)
+/project-context:quick
+# "Production error: users can't log in after password reset.
+#  Error in logs: 'token_expired' on /api/auth/verify-reset"
+
+# Quick mode creates a mental 1-3 task plan and executes immediately
+# For urgent fixes this is faster than the full brainstorm → plan cycle
+
+# 2. For complex bugs, use the full flow instead
+/project-context:brainstorm
+# "Login fails after password reset. Could be: token TTL, clock skew,
+#  or race condition between reset and session invalidation."
+
+/project-context:plan
+# Plan: reproduce → root cause → fix → regression test
+
+/project-context:implement
+
+# 3. Post-mortem: capture learnings
+/project-context:update --chat
+# Captures: what broke, root cause, fix applied, prevention pattern
+# Updates patterns.md with anti-pattern documentation
+# Updates progress.md with the fix
+```
+
+---
+
+### Flow 4: Tech Debt / Refactoring
+
+Methodical flow for improving code quality without breaking existing functionality.
+
+```
+Identify → Brainstorm approach → Plan increments → Implement → Validate
+```
+
+```bash
+# 1. Identify scope — scan codebase for current state
+/project-context:update --scan
+# Updates context files with current codebase state
+
+# 2. Brainstorm the refactoring approach
+/project-context:brainstorm
+# "Our API handlers mix business logic with HTTP concerns.
+#  Discuss: extract service layer, repository pattern, or keep
+#  handlers but add middleware. Consider test coverage impact."
+# Lock: service layer extraction, repository pattern for data access
+
+# 3. Plan incremental refactoring (one module at a time)
+/project-context:plan
+# Phase 1: Extract UserService from user handlers (low risk)
+# Phase 2: Extract OrderService (medium risk, more dependencies)
+# Phase 3: Add repository layer for database access
+# Each phase is independently deployable
+
+# 4. Challenge for risk assessment
+/project-context:challenge
+# Flags: "Phase 2 touches payment flow — needs extra review"
+# Flags: "No rollback strategy defined"
+
+# 5. Implement phase by phase
+/project-context:implement
+# After each phase: validate, deploy, then continue
+# /project-context:update --chat between phases
+
+# 6. Optimize context after major refactor
+/project-context:optimize
+# Compacts completed work, archives old plans
+```
+
+---
+
+### Flow Summary
+
+| Flow | Key Commands | When to Use |
+|------|-------------|-------------|
+| **PRD → ERD** | `brainstorm` → `plan` → `challenge` → `implement` | Structured feature delivery with milestones |
+| **Greenfield** | `init` → `brainstorm` → `plan` → `implement` | New project from scratch |
+| **Bug Fix** | `quick` or `brainstorm` → `plan` → `implement` | Urgent fixes or complex bugs |
+| **Tech Debt** | `update --scan` → `brainstorm` → `plan` → `implement` | Code quality improvements |
+
+> **Not sure which command to use?** Run `/project-context:next` — it analyzes your project state and recommends the best next action.
+
 ## Native Claude Code Features (v2.1)
 
 This plugin leverages three native Claude Code features for enhanced workflows:
@@ -106,8 +337,25 @@ The planner excels at:
 - Project planning (multi-feature initiatives)
 - Architecture planning (system design)
 - Refactoring planning (technical improvements)
+- **ERD creation** (engineering requirements docs from PRD milestones)
 
 Plans can be saved to `.project-context/plans/[feature-name].md` for reference across sessions.
+
+#### ERD (Engineering Requirements Document) Template
+
+When you ask the planner to "create an ERD" or "design the technical implementation", it uses the ERD template which includes:
+
+- **Data Models** — Entity relationships with Mermaid ER diagrams, schema details, migrations
+- **API Contracts** — Endpoints with request/response schemas, auth, and error codes
+- **Architecture** — Component diagrams, sequence diagrams, component details
+- **Security & Performance** — Authentication, authorization, caching strategy, expected load
+- **Testing Strategy** — Unit, integration, and E2E test plan
+
+ERDs are designed to be created per PRD milestone. Use `/project-context:brainstorm` first to review the PRD and lock technical decisions, then `/project-context:plan` to create the ERD.
+
+#### PRD Summary Template
+
+When starting from a PRD, the planner can also capture PRD milestones, success metrics, and stakeholders in `brief.md` using the PRD Summary template. This gives all subsequent commands awareness of the overall product context.
 
 **Example planning session:**
 ```
