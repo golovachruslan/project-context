@@ -51,17 +51,27 @@ Project Context supports the full development lifecycle. Below are four common f
 
 ### Flow 1: PRD → ERD → Implementation (Feature Delivery)
 
-The most structured flow — used when your team receives a Product Requirements Document (PRD) with milestones and needs to design, plan, and ship features.
+The most structured flow — used when your team receives a Product Requirements Document (PRD) with milestones and needs to design, plan, and ship features. Works for both new and existing projects.
 
 ```
-PRD arrives → Review & Brainstorm → ERD (per milestone) → Plan → Implement → Update
+PRD arrives → Capture in context → Review & Brainstorm → ERD (per milestone) → Implement → Update
 ```
 
-**Step 1: Initialize context from the PRD**
+**Step 1: Capture the PRD in project context**
+
+For a **new project** — initialize context from scratch:
 ```bash
 /project-context:init
 # During the wizard, populate brief.md with PRD goals, scope, and milestones
 # Paste or summarize the PRD when prompted for project goals
+```
+
+For an **existing project** — update brief.md with the new PRD scope:
+```bash
+/project-context:update brief --input
+# Add PRD milestones, success metrics, and scope to the existing brief
+# The planner will use the PRD Summary template to structure this
+# Existing project goals and architecture are preserved
 ```
 
 **Step 2: Review PRD and lock decisions with brainstorm**
@@ -70,6 +80,11 @@ PRD arrives → Review & Brainstorm → ERD (per milestone) → Plan → Impleme
 # "We received a PRD for user authentication. It has 3 milestones:
 #  M1: Email/password auth, M2: OAuth providers, M3: MFA.
 #  Let's review M1 scope and identify gray areas."
+
+# For existing projects, brainstorm also considers:
+#  - How new features fit into existing architecture
+#  - Which existing components need changes vs new ones
+#  - Backward compatibility and migration concerns
 
 # Brainstorm identifies ambiguities:
 #  - Session storage: Redis vs JWT?
