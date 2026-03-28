@@ -108,22 +108,55 @@ graph TB
 
 ## progress.md
 
+The main `progress.md` is a lightweight **index** that links to per-feature progress files. Each feature gets its own file under `progress/` from the moment it's planned — not just when archived.
+
 ```markdown
 # Progress
 
-## Completed
-- [x] [Feature/task] (YYYY-MM-DD)
+## Active Features
+- **[Feature Name]** — [status] → [progress/feature-name.md](progress/feature-name.md)
 
-## In Progress
-- [ ] **[Feature]** — [status/percentage]
-
-## Upcoming
-- [ ] [Feature]
+## Completed Features
+- [Feature Name](progress/feature-name.md) (YYYY-MM-DD)
 
 ## Known Issues
 | Issue | Severity | Workaround |
 |-------|----------|------------|
 | | | |
+
+---
+*Last updated: YYYY-MM-DD*
+```
+
+### progress/\<feature-name\>.md (per-feature file)
+
+Each feature tracks its own progress in a dedicated file. Created when a plan is saved, updated during implementation.
+
+```markdown
+# [Feature Name] — Progress
+
+**Status:** Planning | In Progress | Completed
+**Plan:** [plans/feature-name.md](../plans/feature-name.md)
+**Started:** YYYY-MM-DD
+**Completed:** YYYY-MM-DD (when done)
+
+## Completed
+- [x] [Task/phase] (YYYY-MM-DD)
+
+## In Progress
+- [ ] **[Task]** — [status/percentage]
+
+## Upcoming
+- [ ] [Task]
+
+## Key Deliverables
+- `path/to/file.ts` — [purpose]
+
+## Decisions Made
+- [Decision]: [choice] — [rationale]
+
+## Notes
+- [Learnings, blockers resolved, etc.]
 
 ---
 *Last updated: YYYY-MM-DD*

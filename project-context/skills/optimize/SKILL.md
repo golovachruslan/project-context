@@ -73,34 +73,24 @@ Context Health Report:
 
 ## Compact Operation
 
-### 4C-1: Archive Completed Work (progress.md)
+### 4C-1: Compact Progress Files
 
-Scan `progress.md` for completed items. Group by feature/phase.
+**Per-feature files already exist** (created during planning). Compact them:
 
-For each completed feature/phase with substantial content (3+ items or detailed descriptions):
+1. **Migrate legacy entries:** If `progress.md` still has inline completed items (not linked to per-feature files), extract them into `progress/<feature-name>.md` files and replace with one-liner links.
 
-1. Create `progress/<feature-name>.md` with the archived content:
+2. **Compact per-feature files:** For completed features in `progress/<feature>.md`:
+   - Condense verbose task descriptions into brief summaries
+   - Remove resolved blockers and intermediate status notes
+   - Keep: completed tasks with dates, key deliverables, decisions made
 
+3. **Update progress.md index:** Ensure it's a clean index:
 ```markdown
-# [Feature Name] — Archive
+## Active Features
+- **Feature B** — In Progress → [progress/feature-b.md](progress/feature-b.md)
 
-**Completed:** YYYY-MM-DD
-
-## Work Completed
-- [Detailed items moved from progress.md]
-
-## Key Deliverables
-- [Files created/modified]
-
-## Decisions Made
-- [Any decisions captured during this work]
-```
-
-2. Replace the detailed items in `progress.md` with a one-liner + link:
-
-```markdown
-## Completed
-- [Feature Name](progress/feature-name.md) (YYYY-MM-DD)
+## Completed Features
+- [Feature A](progress/feature-a.md) (YYYY-MM-DD)
 ```
 
 ### 4C-2: Prune State (state.md)

@@ -188,20 +188,36 @@ Implementing: [Feature Name] — Phase [N] of [M] complete
 Continue with Phase [N+1]: [Phase Name]
 ```
 
-#### 7c. Update `.project-context/progress.md`
+#### 7c. Update per-feature progress file + `progress.md` index
 
-Read current `progress.md`, then use Edit to:
+1. **Update `.project-context/progress/<feature-name>.md`** (the per-feature file):
+   - Move completed tasks from **Upcoming**/**In Progress** to **Completed** with dates
+   - Update **Status** to `In Progress` (partial) or `Completed` (all phases done)
+   - Add **Key Deliverables** (files created/modified)
+   - Set **Completed** date if fully done
 
-- Move completed items from **In Progress** / **Upcoming** to **Completed** section
-- Add entries with today's date for each completed phase/feature
-- Reference specific deliverables (files created, endpoints added, etc.)
+2. **Update `.project-context/progress.md`** (the index):
+   - Update the feature's status in **Active Features**
+   - If fully completed: move entry from **Active Features** to **Completed Features** with date
 
-Example:
+Example per-feature file after completion:
 ```markdown
+**Status:** Completed
+**Completed:** 2026-03-28
+
 ## Completed
-- **YYYY-MM-DD**: [Feature Name] — Phase 1: [description], Phase 2: [description]
-  - Files: `path/to/new-file.ts`, `path/to/modified-file.ts`
-  - Plan: `.project-context/plans/[name].md`
+- [x] Phase 1: Core middleware (2026-03-25)
+- [x] Phase 2: API endpoints (2026-03-27)
+
+## Key Deliverables
+- `src/auth/middleware.ts` — JWT validation middleware
+- `src/auth/routes.ts` — Login/logout endpoints
+```
+
+Example index entry:
+```markdown
+## Completed Features
+- [Auth System](progress/auth-system.md) (2026-03-28)
 ```
 
 #### 7d. Evaluate `.project-context/architecture.md` (if applicable)

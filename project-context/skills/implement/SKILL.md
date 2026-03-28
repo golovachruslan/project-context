@@ -31,14 +31,17 @@ hooks:
             1. Read .project-context/state.md — it should reflect post-implementation state
                (should NOT still reference "Planning" or "Implementing" as current focus
                without noting completion).
-            2. Read .project-context/progress.md — it should have a recent entry referencing
-               the completed feature/plan.
+            2. Derive the feature name from the plan filename (e.g., plans/auth-system.md → auth-system).
+               Read .project-context/progress/<feature-name>.md — it should exist and have
+               Status set to Completed with completed task entries.
+            3. Read .project-context/progress.md — it should reference the feature
+               (in Active Features or Completed Features section).
 
-            If BOTH files appear updated with completion info, continue to step 3.
-            If either file is missing completion info → return {"ok": false,
-              "reason": "Implementation marked complete but context files not synced. You MUST update state.md (set current focus to completed feature, set next action) and progress.md (add completed items with date) before finishing. This is mandatory per Step 7 of the implement workflow."}
+            If ALL files appear updated with completion info, continue to step 4.
+            If any file is missing completion info → return {"ok": false,
+              "reason": "Implementation marked complete but context files not synced. You MUST update state.md (current focus + next action), progress/<feature>.md (status + completed tasks), and progress.md index (feature entry) before finishing. This is mandatory per Step 7 of the implement workflow."}
 
-            3. Check architecture.md and patterns.md (soft check — warning, not blocking):
+            4. Check architecture.md and patterns.md (soft check — warning, not blocking):
                Read .project-context/architecture.md and .project-context/patterns.md.
                Read the plan file to understand what was implemented.
 
@@ -78,9 +81,10 @@ The PostToolUse hook on this skill monitors plan file edits. When a plan's statu
 
 ### Tier 1 — Hard enforcement (blocks completion)
 - **state.md** must reflect post-implementation state (current focus, next action)
-- **progress.md** must have entries for completed work with dates
+- **progress/\<feature-name\>.md** must have entries for completed work with dates and status set to Completed
+- **progress.md** index must reference the completed feature
 
-If either is missing, the hook returns an error and the agent must update them before proceeding.
+If any is missing, the hook returns an error and the agent must update them before proceeding.
 
 ### Tier 2 — Soft enforcement (warns but doesn't block)
 - **architecture.md** — warns if the implementation added components, flows, or technology that aren't reflected
@@ -93,7 +97,8 @@ Soft warnings prompt the agent to evaluate Steps 7d-7e of the implement workflow
 When marking a plan as completed, you MUST:
 
 1. **state.md** — Update current focus, next action, recently completed
-2. **progress.md** — Add completed items with dates and deliverables
+2. **progress/\<feature-name\>.md** — Update per-feature progress file (status, completed tasks, deliverables, dates)
+3. **progress.md** — Update the index (move feature from Active to Completed)
 
 And you MUST evaluate (update only if applicable):
 

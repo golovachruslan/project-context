@@ -2,55 +2,62 @@
 
 Detailed rules for compacting project context files.
 
-## Archive Rules (progress.md)
+## Per-Feature Progress Files
 
-### When to Archive
+### Structure
 
-Archive completed items when:
-- 3+ completed items belong to the same feature/phase
-- A completed item has detailed sub-items or descriptions
-- progress.md exceeds 60 lines
+Each feature gets its own `progress/<feature-name>.md` file, created when the plan is saved (not retroactively). The main `progress.md` is a lightweight index.
 
-### Archive File Structure
-
-Each feature/phase gets its own file under `progress/`:
+### Per-Feature File Template
 
 ```markdown
-# [Feature Name] — Archive
+# [Feature Name] — Progress
 
-**Completed:** YYYY-MM-DD
-**Related Plan:** [link to plan if exists]
+**Status:** Planning | In Progress | Completed
+**Plan:** [plans/feature-name.md](../plans/feature-name.md)
+**Started:** YYYY-MM-DD
+**Completed:** YYYY-MM-DD (when done)
 
-## Work Completed
-- [x] Task 1 — description
-- [x] Task 2 — description
-- [x] Task 3 — description
+## Completed
+- [x] Task 1 — description (YYYY-MM-DD)
+- [x] Task 2 — description (YYYY-MM-DD)
+
+## In Progress
+- [ ] **Task 3** — [status]
+
+## Upcoming
+- [ ] Task 4
 
 ## Key Deliverables
 - `path/to/created-file.ts` — [purpose]
-- `path/to/modified-file.ts` — [what changed]
 
 ## Decisions Made
 - [Decision]: [choice] — [rationale]
 
 ## Notes
-- [Any learnings or context worth preserving]
+- [Learnings, blockers resolved, etc.]
 ```
 
 ### Naming Convention
 
-Archive files use hyphen-case derived from the feature/phase name:
+Per-feature files use hyphen-case derived from the feature/plan name:
 - "User Authentication System" → `progress/user-authentication-system.md`
 - "Phase 2: API Endpoints" → `progress/phase-2-api-endpoints.md`
-- "PR #38 merged" → too small to archive (single item)
 
-### What Stays in progress.md
+### What Stays in progress.md (index)
 
-After archiving, progress.md keeps:
-- One-liner with link per archived feature: `- [Feature Name](progress/feature-name.md) (YYYY-MM-DD)`
-- Recent completed items (< 7 days old) — not yet archived
-- All "In Progress" and "Upcoming" items (never archive these)
-- "Known Issues" section (active issues only)
+The index contains only:
+- **Active Features**: one-liner + link per in-progress feature
+- **Completed Features**: one-liner + link + completion date per done feature
+- **Known Issues**: active cross-feature issues only
+
+### Legacy Migration
+
+If `progress.md` has inline completed items (pre-per-feature structure):
+- Group by feature/phase
+- Extract into `progress/<feature-name>.md` files
+- Replace inline items with one-liner links in the index
+- Only migrate groups of 3+ items; single items can stay inline
 
 ## Pruning Rules (state.md)
 

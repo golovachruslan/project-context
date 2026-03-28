@@ -118,7 +118,8 @@ Map extracted insights to appropriate files:
 | Architecture decisions, tech choices | `architecture.md` | "Switched from REST to GraphQL", diagram updates |
 | Coding patterns, conventions | `patterns.md` | "Using custom hooks for data fetching" |
 | Bug fixes, learnings, anti-patterns | `patterns.md` | "Avoid prop drilling - use Context API" |
-| Completed work, current status | `progress.md` | "Completed auth system, starting on dashboard" |
+| Completed work, current status | `progress/<feature>.md` | "Completed auth system phase 1, starting phase 2" |
+| Feature-level milestones | `progress.md` (index) | "Auth system completed" → move to Completed Features |
 | Current focus, blockers, next action | `state.md` | "Working on Phase 2, blocked by API design" |
 
 ### 2d. Propose Updates
@@ -174,7 +175,7 @@ git diff --stat HEAD~5 2>/dev/null || git status --short
 Analyze for:
 - New components → `architecture.md`
 - New patterns → `patterns.md`
-- Completed work → `progress.md`
+- Completed work → `progress/<feature>.md` (per-feature file) + update `progress.md` index if status changed
 
 ---
 
@@ -196,7 +197,8 @@ python project-context/scripts/manage_context.py update-sections --file AGENTS.m
 ## Step 3.5: Suggest Optimization (if needed)
 
 After applying updates, check if context files have grown significantly:
-- progress.md has 10+ completed items → suggest compacting: "progress.md has grown. Run `/project-context:optimize` to archive completed items."
+- A per-feature progress file has 10+ completed items → suggest compacting: "progress/<feature>.md has grown. Run `/project-context:optimize` to compact it."
+- progress.md index has items that should be per-feature files → suggest: "Some progress entries should be in per-feature files under `progress/`. Run `/project-context:optimize` to organize."
 - Any file exceeds ~100 lines → suggest organizing: "[file] is getting large. Run `/project-context:optimize` to split into focused files."
 
 This is a suggestion only — do not auto-run optimize.
@@ -246,9 +248,13 @@ Update when: New technology adopted, architecture patterns change, components ad
 Update when: Coding pattern established, convention adopted, best practice identified, anti-pattern discovered, solution to common problem found.
 **Organize by category** (Error Handling, State Management, etc.)
 
-### progress.md
-Update when: Feature completed, milestone reached, current work changes, blocker resolved, next steps identified.
-**Format:** Chronological entries with dates, clear status indicators.
+### progress.md (index)
+Update when: Feature status changes (started, completed), new feature begins.
+**Format:** Lightweight index with links to per-feature files. Active Features and Completed Features sections.
+
+### progress/\<feature\>.md (per-feature)
+Update when: Task completed, milestone reached, blocker resolved, deliverables produced, next steps identified.
+**Format:** Detailed per-feature tracking with dates, status indicators, deliverables, and decisions.
 
 ### state.md
 Update when: Current focus changes, active plan changes, new blockers, session context shifts.

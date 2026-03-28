@@ -13,7 +13,8 @@ Each file must match its canonical template from `references/file-templates.md`:
 | brief.md | Overview, Goals, Scope (In/Out) | Last updated timestamp |
 | architecture.md | Tech Stack, System Overview (Mermaid), Key Decisions | Last updated timestamp |
 | state.md | Current Position, Session Info, Blockers, Decisions Pending, Next Action | Last updated timestamp |
-| progress.md | Completed, In Progress, Upcoming, Known Issues | Last updated timestamp |
+| progress.md | Active Features, Completed Features, Known Issues | Last updated timestamp |
+| progress/\<feature\>.md | Status, Plan, Completed, In Progress, Upcoming, Key Deliverables | Last updated timestamp |
 | patterns.md | Code Patterns, Naming Conventions, Learnings, Anti-Patterns | Last updated timestamp |
 
 ### Section Ordering
@@ -41,7 +42,7 @@ When content appears in multiple files, the **owner** keeps it and others get a 
 | Architecture decisions ("we chose X") | architecture.md | patterns.md (unless it's a coding pattern) |
 | Coding patterns, conventions | patterns.md | architecture.md |
 | Current status, blockers | state.md | progress.md (progress tracks tasks, not status) |
-| Task completion history | progress.md | state.md (state keeps only "Recently Completed" summary) |
+| Task completion history | progress/\<feature\>.md | state.md (state keeps only "Recently Completed" summary), progress.md index |
 | Known issues | progress.md | state.md (unless it's a blocker) |
 
 ### Borderline Cases
@@ -87,21 +88,19 @@ Group decisions by component area:
 | Decision | Choice | Rationale | Date |
 ```
 
-### progress.md Grouping
+### progress.md (Index) Structure
 
-Completed items grouped by feature (especially useful before archiving):
+The main `progress.md` is a lightweight index linking to per-feature files:
 
 ```markdown
-## Completed
+## Active Features
+- **Dashboard** — In Progress → [progress/dashboard.md](progress/dashboard.md)
 
-### Auth System
-- [x] JWT middleware (2026-03-01)
-- [x] Login endpoint (2026-03-02)
-- [x] Token refresh (2026-03-03)
-
-### Dashboard
-- [x] Layout component (2026-03-05)
+## Completed Features
+- [Auth System](progress/auth-system.md) (2026-03-03)
 ```
+
+Detailed task tracking lives in per-feature files under `progress/`.
 
 ## Cross-File Consistency Checks
 
@@ -181,11 +180,15 @@ These two files have natural overlap. Organize the boundary:
 - Pending decisions
 - Next action
 
-### progress.md owns:
-- Full task history (completed, in progress, upcoming)
-- Known issues (including non-blocking ones)
-- Feature archive links
+### progress.md (index) owns:
+- Feature-level status (active vs completed) with links to per-feature files
+- Cross-feature known issues
+
+### progress/\<feature\>.md owns:
+- Full task history for that feature (completed, in progress, upcoming)
+- Feature-specific deliverables, decisions, and notes
 
 ### Overlap resolution:
-- If state.md lists completed work in "Recently Completed": keep as max 3 one-liners, link to progress.md for full history
-- If progress.md has blocker info: move active blockers to state.md, keep only non-blocking issues in progress.md "Known Issues"
+- If state.md lists completed work in "Recently Completed": keep as max 3 one-liners, link to per-feature file for full history
+- If a per-feature file has blocker info: move active blockers to state.md, keep only non-blocking issues in the per-feature file's Notes
+- If progress.md index has inline task details: extract to per-feature files, replace with links

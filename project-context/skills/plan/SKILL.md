@@ -20,12 +20,14 @@ hooks:
 
             If it IS a plan file:
             1. Use the project-context:plan-verification skill to validate plan structure.
-            2. Then check if .project-context/state.md and .project-context/progress.md
-               have been updated to reference this plan. Read both files and look for
-               a reference to the plan filename.
-               - If BOTH files reference the plan → return {"ok": true}
-               - If either file is MISSING the plan reference → return {"ok": false,
-                 "reason": "Context files not synced. You MUST update state.md (set current focus and next action to reference the plan) and progress.md (add plan entry with date) before finishing. This is mandatory per Step 7 of the planning workflow."}
+            2. Derive the feature name from the plan filename (e.g., plans/auth-system.md → auth-system).
+            3. Check if these files have been updated to reference this plan:
+               a. .project-context/state.md — should reference the plan
+               b. .project-context/progress/<feature-name>.md — should exist with Status: Planning and a link to the plan
+               c. .project-context/progress.md — should have an Active Features entry for this feature
+               - If ALL files are properly set up → return {"ok": true}
+               - If any file is MISSING → return {"ok": false,
+                 "reason": "Context files not synced. You MUST: (1) update state.md to reference the plan, (2) create progress/<feature>.md with Status: Planning and upcoming tasks, (3) add an Active Features entry in progress.md. This is mandatory per Step 7 of the planning workflow."}
             Return {"ok": true} if everything passes, or {"ok": false, "reason": "..."} if not.
           statusMessage: "Validating plan and context sync..."
           timeout: 90
@@ -177,8 +179,17 @@ After saving the plan file, you MUST update these `.project-context/` files befo
 #### 7a. Update `state.md`
 Use Edit to update **Current Focus**, **Next Action**, and **Active Plan** to reference the new plan.
 
-#### 7b. Update `progress.md`
-Use Edit to add a dated plan entry to the **Upcoming** or **In Progress** section.
+#### 7b. Create per-feature progress file + update `progress.md` index
+
+1. Create `progress/` directory under `.project-context/` if it doesn't exist
+2. Create `.project-context/progress/<feature-name>.md` (hyphen-case) with:
+   - **Status:** Planning
+   - **Plan:** link to the plan file
+   - **Started:** today's date
+   - **Upcoming** section listing the plan's phases/tasks
+3. Update `.project-context/progress.md` to add an entry under **Active Features** linking to the per-feature file
+
+This keeps `progress.md` as a lightweight index while each feature tracks its own detailed progress.
 
 #### 7c. Evaluate `architecture.md` (only if plan introduces new components, flows, or tech)
 If applicable, use Edit to add planned components to diagrams and a **Key Decisions** entry. If architecture.md was not read in Step 1, read it now. Skip otherwise.

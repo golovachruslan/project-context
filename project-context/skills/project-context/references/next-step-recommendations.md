@@ -16,7 +16,7 @@ Launch a `next-step-recommender` agent with:
 - **Summary:** [brief description of what just happened]
 ```
 
-The agent reads `state.md`, `progress.md`, and `plans/*.md`, then returns:
+The agent reads `state.md`, `progress.md`, `progress/*.md`, and `plans/*.md`, then returns:
 
 ```
 NEXT_STEP: /project-context:<command> [args]

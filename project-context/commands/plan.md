@@ -98,9 +98,10 @@ Plan verification runs automatically after saving (via skill hook).
    - Set next action to implement the plan
    - Reference the plan file path
 
-2. **Update `.project-context/progress.md`**:
-   - Add an entry with today's date referencing the new plan
-   - Place it in the appropriate section (Upcoming/In Progress)
+2. **Create per-feature progress file + update index**:
+   - Create `.project-context/progress/` directory if it doesn't exist
+   - Create `.project-context/progress/<feature-name>.md` with Status: Planning, plan link, started date, and upcoming tasks from the plan
+   - Update `.project-context/progress.md` to add an **Active Features** entry linking to the per-feature file
 
 3. **Evaluate `.project-context/architecture.md`** (if applicable):
    - If the plan introduces new components, changes system flows, or adds technology, update `architecture.md`
