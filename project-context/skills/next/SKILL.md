@@ -1,6 +1,6 @@
 ---
 name: project-context:next
-description: Smart routing - determines what to do next based on current project state
+description: "Smart routing - determines what to do next based on current project state. Triggers: 'what should I do next', 'next step', 'what now', 'where were we', 'project status', 'what to do'. Analyzes project state and routes to the right action."
 allowed-tools:
   - Read
   - Bash

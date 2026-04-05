@@ -1,6 +1,6 @@
 ---
 name: project-context:validate
-description: Validate project context files for completeness, freshness, and Mermaid syntax
+description: "Validate project context files for completeness, freshness, and Mermaid syntax. Triggers: 'validate context', 'check context', 'context health', 'are context files ok', 'validate project'. Checks file existence, content structure, Mermaid syntax, staleness, and stale references."
 allowed-tools:
   - Read
   - Bash
@@ -172,7 +172,7 @@ Append the agent's recommendation to your output (only if issues were found):
   [REASON from agent]
 ```
 
-If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+If Agent tool is unavailable, refer to `../project-context/references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
 
 ## Validation Levels
 
