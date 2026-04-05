@@ -1,6 +1,6 @@
 ---
 name: project-context:resume
-description: Resume work from a previous session using the continue.md handoff document
+description: "Resume work from a previous session using the continue.md handoff document. Triggers: 'resume', 'pick up where we left off', 'continue from last session', 'what were we doing', 'restore session'. Reads .project-context/continue.md and project context to restore full session state."
 allowed-tools:
   - Read
   - Glob
@@ -98,4 +98,4 @@ Append the agent's recommendation to your status presentation:
   [REASON from agent]
 ```
 
-If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+If Agent tool is unavailable, refer to `../project-context/references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.

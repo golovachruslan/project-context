@@ -27,6 +27,5 @@
     "archive",
     "context-optimization"
   ],
-  "commands": "./commands",
   "skills": "./skills"
 }

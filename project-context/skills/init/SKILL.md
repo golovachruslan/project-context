@@ -1,6 +1,6 @@
 ---
 name: project-context:init
-description: Initialize project context structure with 5 markdown files for tracking project state across sessions
+description: "Initialize project context structure with 5 markdown files for tracking project state across sessions. Triggers: 'init project', 'initialize context', 'set up project context', 'create project context', 'start new project'. Creates .project-context/ directory with brief.md, architecture.md, state.md, progress.md, and patterns.md."
 allowed-tools:
   - Read
   - Write
@@ -40,7 +40,7 @@ Ask user for basic project information using AskUserQuestion:
 
 ### Step 4: Create Context Files
 
-Create 5 files using templates from the project-context skill's `references/file-templates.md`.
+Create 5 files using templates from the project-context skill's `../project-context/references/file-templates.md`.
 
 #### brief.md
 ```markdown
@@ -198,4 +198,4 @@ Append the agent's recommendation to your output:
   [REASON from agent]
 ```
 
-If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+If Agent tool is unavailable, refer to `../project-context/references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.

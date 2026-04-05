@@ -1,6 +1,6 @@
 ---
 name: project-context:quick
-description: Quick ephemeral mode for ad-hoc tasks. Skips brainstorming, creates minimal plan, executes immediately.
+description: "Quick ephemeral mode for ad-hoc tasks. Skips brainstorming, creates minimal plan, executes immediately. Triggers: 'quick fix', 'just do it', 'quick task', 'small change', 'quick mode', 'ad-hoc'. For small features, bug fixes, prototypes where full workflow is overkill."
 allowed-tools:
   - AskUserQuestion
   - Read
@@ -27,7 +27,7 @@ Streamlined path for ad-hoc tasks. Skips brainstorming phase, creates a minimal 
 
 ### Step 1: Read Project Context (if exists)
 
-**Context-First (mandatory).** Follow the [Context-First Protocol](../skills/project-context/references/context-first-protocol.md) before any codebase scanning. Read `.project-context/` files and `dependencies.json` (if present) FIRST.
+**Context-First (mandatory).** Follow the [Context-First Protocol](../project-context/references/context-first-protocol.md) before any codebase scanning. Read `.project-context/` files and `dependencies.json` (if present) FIRST.
 
 ```bash
 ls .project-context/*.md .project-context/*.json 2>/dev/null
@@ -100,7 +100,7 @@ Append the agent's recommendation to your output (only if the agent returns a re
   [REASON from agent]
 ```
 
-If Agent tool is unavailable, refer to `references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
+If Agent tool is unavailable, refer to `../project-context/references/next-step-recommendations.md` for the recommendation graph and determine the next step manually.
 
 ## Rules
 
