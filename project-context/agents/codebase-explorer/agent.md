@@ -3,7 +3,7 @@ name: codebase-explorer
 description: Use this agent for targeted codebase research — finding implementations, tracing execution flows, and answering questions about code. Examples:
 
   <example>
-  Context: The info skill needs to answer a question about how something works in the codebase
+  Context: The ask skill needs to answer a question about how something works in the codebase
   user: "how does the authentication flow work?"
   assistant: "I'll launch a codebase-explorer agent to trace the auth flow through the codebase."
   <commentary>

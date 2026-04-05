@@ -24,7 +24,7 @@ Then read selectively based on task:
 |-----------|-----------|
 | Planning, brainstorming | `architecture.md`, `state.md` (for existing plans) |
 | Implementation, code changes | `architecture.md`, `patterns.md`, `state.md` |
-| Research, info queries | Relevant files per query topic (see info skill) |
+| Research, info queries | Relevant files per query topic (see ask skill) |
 | Challenge, review | `architecture.md`, `patterns.md` |
 | Context management (update, optimize) | All files as needed by operation |
 

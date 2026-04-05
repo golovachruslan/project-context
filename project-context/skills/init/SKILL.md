@@ -40,7 +40,7 @@ Ask user for basic project information using AskUserQuestion:
 
 ### Step 4: Create Context Files
 
-Create 5 files using templates from the project-context skill's `../project-context/references/file-templates.md`.
+Create 5 files using templates from `../project-context/references/file-templates.md`.
 
 #### brief.md
 ```markdown
