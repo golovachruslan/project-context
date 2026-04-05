@@ -1,6 +1,7 @@
 ---
 name: project-context:plan-verification
 description: "Use to verify plan quality. Triggers: 'verify this plan', 'check the plan', 'validate plan'. Checks completeness, actionability, scope clarity, and risk coverage."
+context: fork
 allowed-tools:
   - Read
   - Glob

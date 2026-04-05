@@ -1,6 +1,7 @@
 ---
 name: project-context:update
 description: "Update project context files based on chat history, code changes, or user input. Triggers: 'update context', 'capture learnings', 'retro', 'retrospective', 'what did we learn', 'extract learnings', 'sync context', 'summarize our work', 'capture insights'. Supports --chat (deep conversation analysis with signal recognition), --scan (git diff), --input (interactive)."
+context: fork
 allowed-tools:
   - AskUserQuestion
   - Read

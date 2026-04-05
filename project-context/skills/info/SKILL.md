@@ -1,6 +1,7 @@
 ---
 name: project-context:info
 description: "Answer questions about the current project's codebase, architecture, dependencies, patterns, and implementation details. Use when users ask questions like 'how does X work?', 'where is Y implemented?', 'what does this project do?', 'what dependencies do we use?', 'explain the auth flow', 'how are tests organized?', or any question about the project. Triggers: project questions, codebase questions, 'how does', 'where is', 'what is', 'explain', 'show me', 'find where', 'why does', architecture questions, implementation questions."
+context: fork
 ---
 
 # Info Skill

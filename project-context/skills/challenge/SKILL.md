@@ -1,6 +1,7 @@
 ---
 name: project-context:challenge
 description: "Force critical evaluation of plans or code changes from adversarial perspectives. Use when Claude accepts a proposal too readily, before committing to significant decisions, when something feels off but is hard to articulate, or when stress-testing an approach. Triggers: 'challenge this', 'critique', 'stress-test', 'play devil''s advocate', 'what could go wrong', 'poke holes in'. Integrates with project-context for codebase-aware analysis."
+context: fork
 allowed-tools:
   - Read
   - Write

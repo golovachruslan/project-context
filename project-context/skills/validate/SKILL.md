@@ -1,6 +1,7 @@
 ---
 name: project-context:validate
 description: "Validate project context files for completeness, freshness, and Mermaid syntax. Triggers: 'validate context', 'check context', 'context health', 'are context files ok', 'validate project'. Checks file existence, content structure, Mermaid syntax, staleness, and stale references."
+context: fork
 allowed-tools:
   - Read
   - Bash
