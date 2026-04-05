@@ -1,6 +1,7 @@
 ---
 name: project-context:optimize
 description: "Optimize project context files for efficient AI agent consumption. Triggers: 'optimize context', 'compact context', 'organize context', 'clean up context', 'context too large', 'shrink context files', 'tidy context', 'split large files'. Supports compact (summarize + archive), organize (normalize + dedup + split), or both."
+context: fork
 allowed-tools:
   - AskUserQuestion
   - Read
