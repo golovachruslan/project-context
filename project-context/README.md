@@ -15,7 +15,6 @@ Maintain project context across Claude Code sessions with structured documentati
 - **Deep Context Updates** - Extract learnings from conversations, scan codebase, or interactive input
 - **Session Continuity** - Pause/resume with native Tasks state persistence
 - **Smart Routing** - `/next` command analyzes state and recommends actions
-- **Quick Mode** - Streamlined path for ad-hoc tasks
 - **Multiple Update Sources** - Chat history, code scanning, or manual input
 - **Mermaid Diagrams** - Visual architecture and flow documentation
 - **AI Agent Integration** - Auto-updates CLAUDE.md and AGENTS.md with managed sections
@@ -42,7 +41,7 @@ Maintain project context across Claude Code sessions with structured documentati
 /project-context:update
 
 # Validate context files
-/project-context:validate
+/project-context:optimize --check
 ```
 
 ## Native Claude Code Features (v2.1)
@@ -58,7 +57,7 @@ Enable in settings: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
 
 ### Plan Mode
 
-- **`/project-context:plan`** — Enter Plan Mode (`Shift+Tab` x2) for read-only research before planning
+- Use Plan Mode (`Shift+Tab` x2) for read-only research before planning
 - **`opusplan` model** — Use `/model opusplan` for Opus-quality planning with Sonnet-speed execution
 
 ### Persistent Tasks
@@ -67,7 +66,7 @@ Enable in settings: `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`
 - Tasks use DAG-based dependency tracking matching plan phases
 - Task state persists across sessions in `~/.claude/tasks/`
 - Set `CLAUDE_CODE_TASK_LIST_ID=project-name` for cross-session coordination
-- **`/project-context:pause`** exports task state; **`/project-context:resume`** restores it
+- **`/project-context:save`** exports task state; **`/project-context:resume`** restores it
 
 ## Context Files
 
@@ -83,50 +82,6 @@ The plugin creates 5+1 files in `.project-context/`:
 | `dependencies.json` | Cross-project dependencies (optional, monorepo) | On dependency changes |
 
 ## Commands
-
-### `/project-context:plan`
-
-**NEW in v1.1** - Intelligent feature and project planning with systematic requirement gathering:
-
-```bash
-# Start planning a feature or project
-/project-context:plan
-```
-
-The planner skill will:
-1. **Ask clarifying questions** instead of making assumptions (uses AskUserQuestion tool)
-2. **Gather requirements** systematically (functional, technical, design)
-3. **Identify constraints** (performance, security, scale, timeline)
-4. **Create structured plans** with phases, tasks, and deliverables
-5. **Document trade-offs** and design decisions
-6. **Define success criteria** and next steps
-
-The planner excels at:
-- Feature planning (new functionality)
-- Project planning (multi-feature initiatives)
-- Architecture planning (system design)
-- Refactoring planning (technical improvements)
-
-Plans can be saved to `.project-context/plans/[feature-name].md` for reference across sessions.
-
-**Example planning session:**
-```
-User: /project-context:plan
-User: I want to add dark mode to my app
-
-Claude: I need to understand the scope and technical approach for dark mode.
-
-1. Should dark mode be:
-   - System preference based (auto-switch with OS)
-   - Manual toggle only
-   - Both options available?
-
-2. What's the scope:
-   - Entire application
-   - Specific sections only?
-
-[... continues with requirement gathering, then creates structured plan]
-```
 
 ### `/project-context:init`
 
@@ -160,14 +115,12 @@ Update context files from various sources. The `--chat` mode includes deep conve
 - `--scan` - Scan codebase for changes (git diff)
 - `--input` - Interactive input
 
-### `/project-context:validate`
+### `/project-context:optimize`
 
-Check context files for:
-- Missing required files
-- Empty or incomplete sections
-- Mermaid syntax errors
-- Stale content (outdated timestamps)
-- References to non-existent files
+Validate and optimize context files:
+- **`--check`** — Read-only validation: completeness, freshness, Mermaid syntax, stale references
+- **Compact** — Summarize verbose sections, archive completed work
+- **Organize** — Normalize structure, deduplicate, split large files
 
 ## Monorepo Support
 
@@ -403,7 +356,7 @@ Keep this managed block so project-context commands can refresh the instructions
 2. **Add diagrams for every flow** - Mermaid diagrams with step descriptions
 3. **Document patterns immediately** - Capture learnings before you forget
 4. **Keep brief.md stable** - Only update on major scope changes
-5. **Validate regularly** - Run `/project-context:validate` to catch staleness
+5. **Validate regularly** - Run `/project-context:optimize --check` to catch staleness
 
 ## File Structure
 

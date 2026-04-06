@@ -44,6 +44,11 @@ Always read `.project-context/` files when starting work:
 - `patterns.md` — Established patterns and learnings
 - `dependencies.json` — Cross-project dependencies (monorepo)
 
+### Context Sync Rules
+After creating or modifying any plan in `.project-context/plans/`:
+- Update `state.md` — set current focus, active plan, and next action to reference the plan
+- Update `progress.md` — add a dated entry in the appropriate section (Upcoming or In Progress)
+
 <!-- PROJECT-CONTEXT:END -->
 """
 
