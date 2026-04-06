@@ -111,7 +111,7 @@ If Agent tool is unavailable or `--sequential` is specified, execute tasks seque
 1. Check conversation for a plan
 2. Check `.project-context/plans/` for saved plans
 3. If multiple plans, ask user which one
-4. If no plans found: "Run `/project-context:plan` first"
+4. If no plans found: "Create a plan first using Plan Mode (Shift+Tab)"
 
 ### Step 2: Confirm Scope
 

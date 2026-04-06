@@ -88,10 +88,10 @@ When the feature description matches a dep's `what` field:
 - For downstream deps: "Downstream `[project]` consumes [what] from us — will this be a breaking change for them?"
 - If the dep's context is cached, load it and ask more specific questions based on its architecture
 
-### project-context:plan — Include cross-project coordination
+### Planning — Include cross-project coordination
 
 When a plan task involves a dep boundary:
-- Add "Cross-Project Impact" section to the plan (see plan/SKILL.md template)
+- Add "Cross-Project Impact" section to the plan
 - Add explicit coordination tasks: "Update shared types in [dep path]", "Verify [downstream] still builds"
 - Mark coordination tasks as dependencies of implementation tasks in the DAG
 
@@ -114,14 +114,14 @@ When the question is about integration, dependencies, or a topic matching a dep'
 - Load the relevant dep's `brief.md` + `architecture.md`
 - Answer the question using both local and dep context
 
-### validate — Check dependency health
+### optimize --check — Check dependency health
 
 For each declared dependency:
 - Local: verify path exists and target has `.project-context/`
 - Git: verify cache exists in `.deps-cache/<project>/` and is not stale
 
-### plan-verification — Check cross-project coverage
+### Plan review — Check cross-project coverage
 
-When a plan touches dep boundaries (based on `what` field matching):
+When reviewing a plan that touches dep boundaries (based on `what` field matching):
 - Verify plan includes cross-project coordination (Impact section or explicit tasks)
 - Flag as Warning if missing

@@ -67,7 +67,7 @@ If `.project-context/state.md` exists, read it for additional routing info:
 
 ## Other Options
 - /project-context:brainstorm — Start brainstorming a new feature
-- /project-context:plan — Create a plan (if decisions are locked)
+- Plan Mode (Shift+Tab) — Create a plan (if decisions are locked)
 - /project-context:update — Refresh context files or extract learnings
-- /project-context:pause — Save session state for later
+- /project-context:save — Save session state for later
 ```

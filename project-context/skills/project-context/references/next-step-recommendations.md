@@ -52,14 +52,12 @@ If the Agent tool is unavailable, use this quick-reference graph to determine th
 | Completed Skill | Default Next Step | Condition for Override |
 |---|---|---|
 | `init` | `/project-context:brainstorm` | — |
-| `brainstorm` | `/project-context:plan` | If concerns exist → `/project-context:challenge` |
-| `plan` | `/project-context:implement <path>` | If plan has concerns → `/project-context:challenge` |
-| `challenge` | `/project-context:implement <path>` | If critical issues → `/project-context:plan` (revise) |
-| `implement` | `/project-context:update --chat` | If pausing → `/project-context:pause` |
+| `brainstorm` | Plan Mode (Shift+Tab) | If concerns exist → `/project-context:challenge` |
+| `challenge` | `/project-context:implement <path>` | If critical issues → Plan Mode (revise) |
+| `implement` | `/project-context:update --chat` | If pausing → `/project-context:save` |
 | `update` | `/project-context:brainstorm` | If files grew large → `/project-context:optimize` |
 | `optimize` | `/project-context:brainstorm` | If active plan exists → `/project-context:implement` |
-| `quick` | `/project-context:update --chat` | If minor change → omit |
-| `validate` | `/project-context:update` | If all valid → omit |
+| `optimize --check` | `/project-context:update` | If all valid → omit |
 | `resume` | Follow `continue.md` next steps | If active plan → `/project-context:implement` |
 
 ### State Overrides (check these first)
@@ -72,7 +70,6 @@ If the Agent tool is unavailable, use this quick-reference graph to determine th
 ## Skills That Skip Recommendations
 
 These skills do NOT include a next-step recommendation:
-- **`info`** — Read-only query, not a workflow step
-- **`project-context`** — Informational skill
-- **`pause`** — Session is ending
+- **`ask`** — Read-only query, not a workflow step
+- **`save`** — Session is ending
 - **`next`** — This IS the recommendation engine
