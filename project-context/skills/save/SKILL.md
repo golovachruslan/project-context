@@ -1,6 +1,6 @@
 ---
-name: project-context:pause
-description: "Save session state for later resumption. Creates a handoff document with full context. Triggers: 'pause', 'save session', 'stop here', 'pick up later', 'save state', 'I need to go', 'continue later'. Creates .project-context/continue.md for session handoff."
+name: project-context:save
+description: "Save session state for later resumption. Creates a handoff document with full context. Triggers: 'save', 'save session', 'stop here', 'pick up later', 'save state', 'I need to go', 'continue later', 'pause'. Creates .project-context/continue.md for session handoff."
 allowed-tools:
   - Read
   - Write

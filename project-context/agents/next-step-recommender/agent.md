@@ -48,21 +48,17 @@ Use the completed skill + project state to pick the recommendation:
 - **Default:** `/project-context:brainstorm` — brainstorm your first feature
 
 ### After `brainstorm`
-- **Decisions locked, ready for planning:** `/project-context:plan` — turn decisions into an executable plan
+- **Decisions locked, ready for planning:** Enter Plan Mode (Shift+Tab) — turn decisions into an executable plan
 - **Decisions need stress-testing:** `/project-context:challenge` — challenge the decisions before planning
 
-### After `plan`
-- **Plan saved and verified:** `/project-context:implement <plan-path>` — begin implementation
-- **Plan has concerns:** `/project-context:challenge <plan-path>` — stress-test the plan first
-
 ### After `challenge`
-- **Critical issues found:** `/project-context:plan` — revise the plan to address concerns
+- **Critical issues found:** Enter Plan Mode to revise the plan and address concerns
 - **Plan passed, ready to build:** `/project-context:implement <plan-path>` — proceed with implementation
-- **Decisions challenged (no plan yet):** `/project-context:plan` — create a plan from the refined decisions
+- **Decisions challenged (no plan yet):** Enter Plan Mode to create a plan from the refined decisions
 
 ### After `implement`
 - **Implementation complete:** `/project-context:update --chat` — capture learnings and insights from this session
-- **Partial completion (pausing):** `/project-context:pause` — save state for later resumption
+- **Partial completion (pausing):** `/project-context:save` — save state for later resumption
 
 ### After `update`
 - **Context files grew large:** `/project-context:optimize` — compact and organize context files
@@ -72,19 +68,13 @@ Use the completed skill + project state to pick the recommendation:
 ### After `optimize`
 - **No active plans:** `/project-context:brainstorm` — brainstorm next feature
 - **Active plan exists:** `/project-context:implement <plan-path>` — continue with implementation
+- **Ran with `--check` and issues found:** `/project-context:update` — fix stale or missing content
+- **Ran with `--check` and all valid:** No strong recommendation — context is healthy
 
-### After `quick`
-- **Significant changes made:** `/project-context:update --chat` — capture any learnings
-- **Minor change, context is fresh:** No strong recommendation — context is up to date
+### After `ask`
+- No recommendation — ask is a read-only query, not a workflow step
 
-### After `validate`
-- **Issues found:** `/project-context:update` — fix stale or missing content
-- **All valid:** No strong recommendation — context is healthy
-
-### After `info`
-- No recommendation — info is a read-only query, not a workflow step
-
-### After `pause`
+### After `save`
 - No recommendation — session is ending
 
 ### After `resume`
@@ -136,7 +126,7 @@ REASON: Context is fresh with no active plans — ready to brainstorm the next f
 - Include the full command with arguments (e.g., plan path) when available
 - Keep the REASON to one sentence
 - Only include NOTE when a state override applies
-- If no strong recommendation exists (e.g., after `info` or `pause`), return:
+- If no strong recommendation exists (e.g., after `ask` or `save`), return:
   ```
   NEXT_STEP: none
   REASON: [Brief explanation — e.g., "Session is pausing — resume with /project-context:resume in the next session."]

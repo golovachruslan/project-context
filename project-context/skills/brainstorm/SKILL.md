@@ -129,7 +129,7 @@ These decisions are ready to flow into planning.
 Options:
 1. Append decisions to a plan file (I'll create the plan next)
 2. Save decisions separately for later
-3. Continue directly to planning now (/project-context:plan)
+3. Continue directly to planning now (enter Plan Mode with Shift+Tab)
 ```
 
 If saving, append to the plan file in `.project-context/plans/` or create a new one.
@@ -161,7 +161,7 @@ If Agent tool is unavailable, refer to `references/next-step-recommendations.md`
 
 ## Integration with Planning
 
-The project-context:plan skill should:
+When creating plans (via native Plan Mode), the planner should:
 1. Check for locked decisions before creating a plan
 2. Include a "Decisions" section in the plan referencing these
 3. Never override locked decisions without re-discussing

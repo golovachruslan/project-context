@@ -1,6 +1,6 @@
 ---
 name: project-context:optimize
-description: "Optimize project context files for efficient AI agent consumption. Triggers: 'optimize context', 'compact context', 'organize context', 'clean up context', 'context too large', 'shrink context files', 'tidy context', 'split large files'. Supports compact (summarize + archive), organize (normalize + dedup + split), or both."
+description: "Validate and optimize project context files. Triggers: 'optimize context', 'compact context', 'organize context', 'clean up context', 'context too large', 'shrink context files', 'tidy context', 'split large files', 'validate context', 'check context', 'context health', 'are context files ok', 'validate project'. Supports --check (validate only), compact, organize, or both."
 context: fork
 allowed-tools:
   - AskUserQuestion
@@ -14,8 +14,10 @@ allowed-tools:
 
 # Optimize Project Context
 
-Optimize `.project-context/` files for efficient AI agent consumption. Two operations available:
+Validate and optimize `.project-context/` files for efficient AI agent consumption.
 
+**Modes:**
+- **`--check`** — Read-only validation: check completeness, freshness, Mermaid syntax, stale references (no changes made)
 - **Compact** — Summarize verbose sections, archive completed work to per-feature files
 - **Organize** — Normalize structure, deduplicate, ensure cross-file consistency, split large files
 
@@ -31,9 +33,94 @@ ls .project-context/*.md 2>/dev/null
 
 If not found: "No project context found. Run `/project-context:init` to set up."
 
+### Step 1b: Handle `--check` Mode (Validation Only)
+
+If `--check` flag is provided, run read-only validation and skip all modification steps.
+
+#### Check File Existence
+Verify expected files exist:
+- `.project-context/brief.md`
+- `.project-context/architecture.md`
+- `.project-context/progress.md`
+- `.project-context/patterns.md`
+
+#### Check File Content
+For each file, verify required sections:
+
+- **brief.md**: Has "Overview", "Goals" (at least 1), "Scope"
+- **architecture.md**: Has "Tech Stack", at least 1 Mermaid diagram with description, "Key Decisions"
+- **progress.md**: Has "Current Focus", "Status", completed or in-progress items
+- **patterns.md**: Has at least one pattern or learning documented
+
+#### Validate Mermaid Syntax
+Read `architecture.md` and check each Mermaid code block for:
+- Unclosed code blocks
+- Missing diagram type declaration
+- Invalid arrow syntax
+- Unbalanced brackets/parentheses
+
+#### Check Freshness
+Compare file modification times against recent git commits:
+- `progress.md` — warn if >3 days old
+- `architecture.md` — warn if >7 days old with code changes
+- `patterns.md` — warn if >14 days old
+- `brief.md` — OK if stable
+
+#### Check Dependencies (if `dependencies.json` exists)
+- Valid JSON with `upstream` and `downstream` arrays
+- Each entry has `project`, `what`, and either `path` or `git`
+- Local path deps: path exists and target has `.project-context/`
+- Git link deps: `.deps-cache/<project>/` exists
+- Warn if any git dep cache `fetched_at` is >7 days old
+
+#### Check for Stale References
+Find files/directories mentioned in context files and verify they still exist in the codebase.
+
+#### Output Validation Report
+
+```markdown
+## Project Context Validation Report
+
+### File Status
+| File | Exists | Content | Last Updated | Status |
+|------|--------|---------|--------------|--------|
+| brief.md | ✓ | ✓ | 2024-01-15 | OK |
+| architecture.md | ✓ | ✓ | 2024-01-10 | ⚠️ Stale |
+| progress.md | ✓ | ✓ | 2024-01-14 | OK |
+| patterns.md | ✓ | ✗ | 2024-01-01 | ⚠️ Empty |
+
+### Dependencies
+*(Omit section if no `dependencies.json`)*
+| Dependency | Type | Direction | Status |
+|---|---|---|---|
+| shared | local | upstream | ✓ Path valid, has `.project-context/` |
+| auth-service | git | upstream | ⚠️ Cache stale (12 days) — run `--fetch` |
+
+### Issues Found
+1. **architecture.md**: Last updated 5 days ago, but 12 files changed since
+2. **patterns.md**: No patterns documented yet
+
+### Mermaid Diagrams
+- Found 2 diagrams in architecture.md
+- Syntax: ✓ Valid
+
+### Recommendations
+1. Run `/project-context:optimize` to fix issues
+2. Add patterns to patterns.md based on recent work
+```
+
+**Validation levels:**
+- **Critical** (must fix): Missing required files, empty files, invalid Mermaid syntax
+- **Warning** (should address): Stale content, missing sections, dead references
+- **Suggestion** (nice to have): More diagrams, more patterns
+
+After outputting the report, skip to Step 8 (Recommend Next Step). Do not proceed to modification steps.
+
+---
+
 ### Step 2: Ask User What to Do
 
-Use AskUserQuestion:
+If no `--check` flag, use AskUserQuestion:
 
 ```
 What would you like to optimize?
