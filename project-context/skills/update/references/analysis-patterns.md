@@ -1,25 +1,22 @@
 # Analysis Patterns
 
-Patterns for extracting learnings from conversations, organized by conversation type.
+Patterns for extracting reusable knowledge from conversations. Focused on what passes the "new teammate" test.
 
 ## Extraction Decision Tree
 
 ```
-Is this learning about...
-├─ Project goals/scope/vision?         → brief.md
-├─ Tech choices/components/flows?      → architecture.md
-├─ Coding patterns/conventions?        → patterns.md
-├─ Work completed/in-progress?         → progress.md
-├─ Current position/blockers/focus?    → state.md
-└─ Unclear/spans multiple?             → Ask user
+Is this knowledge...
+├─ Reusable across multiple situations?
+│  ├─ Tech choice / architecture change?    → architecture.md
+│  ├─ Coding pattern / convention?          → patterns.md
+│  ├─ Gotcha / anti-pattern?               → patterns.md
+│  ├─ Scope / goals change?                → brief.md
+│  └─ Unclear / spans multiple?            → Ask user
+├─ Status update (completed/in-progress)?  → SKIP (handled by implement + CLAUDE.md sync)
+└─ One-off / trivial?                      → SKIP
 ```
 
 ## Signal Recognition
-
-### Learning Signals
-- "I learned that...", "It turns out...", "The solution was..."
-- "This works better than...", "We should always/never..."
-- **Extract to:** patterns.md
 
 ### Decision Signals
 - "We decided to...", "Going with X because..."
@@ -31,52 +28,49 @@ Is this learning about...
 - "Standard approach is...", "Following convention of..."
 - **Extract to:** patterns.md
 
-### Error Signals
-- "The bug was caused by...", "Fixed by...", "Watch out for..."
+### Gotcha Signals
+- "The bug was caused by...", "Watch out for..."
+- "This almost worked but...", "Turns out..."
 - **Extract to:** patterns.md (as anti-patterns with solutions)
 
-### Progress Signals
-- "Completed...", "Finished implementing...", "Now working on..."
-- **Extract to:** progress.md and state.md
+### Architecture Signals
+- "Added a new service for...", "Changed the flow to..."
+- "Introduced X for...", "Replaced Y with Z"
+- **Extract to:** architecture.md
 
-## Pattern Types
+### Skip Signals (do NOT extract)
+- "Fixed the typo", "Added missing import"
+- "Completed feature X", "Now working on Y"
+- "Updated tests", "Refactored for readability"
 
-### Feature Implementation → Extract:
-- **patterns.md**: Code patterns, libraries used, design patterns applied
-- **progress.md**: Feature completion, dependencies
-- **architecture.md**: New components, integration points, data flow changes
+## Entry Format
 
-### Debugging Session → Extract:
-- **patterns.md**: Root causes, solutions, anti-patterns, preventive measures
-- **progress.md**: Bug status, remaining issues
+Each entry uses the terse bullet format:
 
-### Architecture Decision → Extract:
-- **architecture.md**: Tech choices with rationale, alternatives considered
-- **brief.md**: Scope changes if scope-impacting
+```markdown
+- **Bold name describing the knowledge**
+  One line of context: when/why it applies, what it prevents.
+```
 
-### Refactoring → Extract:
-- **patterns.md**: New patterns, code organization principles
-- **progress.md**: Tech debt addressed, quality improvements
+**Good entries:**
+| Entry | Why it's good |
+|-------|--------------|
+| **Redis pub/sub for cross-service events** / REST polling caused 3s latency in order notifications. | Specific, reusable, includes the "why" |
+| **Prisma migrate deploy in CI** / `migrate dev` resets DB; always use `migrate deploy` in non-local environments. | Gotcha that prevents real damage |
+| **Use composition over config props for UI** / `<Button><Icon/>Save</Button>` not `<Button icon='save' label='Save'/>` | Convention with concrete example |
 
-### Configuration/Setup → Extract:
-- **architecture.md**: Build tools, CI/CD, third-party integrations
-- **patterns.md**: Configuration patterns, environment management
+**Bad entries (skip these):**
+| Entry | Why it's bad |
+|-------|-------------|
+| "Added semicolon to line 42" | Trivial, not reusable |
+| "Made the code better" | Vague, not actionable |
+| "Completed auth system" | Status update, not knowledge |
+| "Use Redux for state" | No context — when/why? |
 
 ## Quality Checklist
 
-Before proposing an update, verify:
-- **Specific**: Includes concrete examples/code?
-- **Actionable**: Can be applied in future work?
-- **Contextual**: Explains when/why it applies?
-- **Non-redundant**: Doesn't duplicate existing content?
-- **Valuable**: Worth preserving for future reference?
-- **Right level of detail**: Not too granular ("added semicolon") or too vague ("made code better")
-
-## Common Mistakes
-
-| Bad | Good |
-|-----|------|
-| "Added semicolon to line 42" | "Established convention: Use semicolons consistently (enforced by ESLint)" |
-| "Made the code better" | "Refactored error handling to use centralized error boundary" |
-| "Use Redux for state" | "Use Redux for state management. Rationale: complex shared state, need time-travel debugging, team familiar with Redux" |
-| "Use composition pattern" | "Use composition pattern: `<Button><Icon name='save'/>Save</Button>` instead of `<Button icon='save' label='Save'/>`" |
+Before including a candidate:
+- [ ] **Reusable** — applies beyond this one instance?
+- [ ] **Specific** — includes concrete context (when/why)?
+- [ ] **Not redundant** — not already in context files?
+- [ ] **"New teammate" test** — would you tell them about this?
