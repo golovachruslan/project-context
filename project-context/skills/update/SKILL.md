@@ -1,6 +1,6 @@
 ---
 name: project-context:update
-description: "Update project context files based on chat history, code changes, or user input. Triggers: 'update context', 'capture learnings', 'retro', 'retrospective', 'what did we learn', 'extract learnings', 'sync context', 'summarize our work', 'capture insights'. Supports --chat (deep conversation analysis with signal recognition), --scan (git diff), --input (interactive)."
+description: "Extract knowledge from conversations, code changes, or user input into project context. Triggers: 'update context', 'capture learnings', 'retro', 'retrospective', 'what did we learn', 'extract learnings', 'sync context', 'summarize our work', 'capture insights'. Focuses on reusable knowledge (patterns, architecture, decisions) — status tracking (state/progress) is handled automatically by implement and CLAUDE.md sync rules."
 context: fork
 allowed-tools:
   - AskUserQuestion
@@ -15,17 +15,19 @@ allowed-tools:
 
 # Update Project Context
 
-Update one or more `.project-context/` files based on different sources. The `--chat` mode includes deep conversation analysis with signal recognition, quality filters, and structured proposals.
+Extract reusable knowledge from conversations, code changes, or user input into `.project-context/` files.
+
+**Focus:** Knowledge capture (patterns, architecture decisions, gotchas) — not status tracking. State and progress updates are handled by the implement skill and CLAUDE.md sync rules.
 
 ## Arguments
 
 - `file` (optional): Specific file to update
   - `brief` — Project goals and scope
   - `architecture` — System diagrams and flows
-  - `state` — Current position and focus
-  - `progress` — Work status and items
   - `patterns` — Patterns and learnings
-  - If omitted: Smart update of relevant files
+  - `state` — Current position (manual override only — skipped in auto-detection)
+  - `progress` — Work status (manual override only — skipped in auto-detection)
+  - If omitted: Smart update of knowledge files (brief, architecture, patterns)
 
 - `--source` (optional): Where to get update information
   - `--chat` — Deep analysis of current conversation history
@@ -54,115 +56,78 @@ If not found: "Run `/project-context:init` first."
 
 ---
 
-## --chat Mode: Deep Conversation Analysis
+## --chat Mode: Knowledge Extraction
 
 ### 2a. Analyze Conversation
 
-**Launch a `conversation-analyzer` agent** to systematically extract insights. The agent receives signal recognition patterns and the current context digest. It runs in parallel with Step 2b.
+**Launch a `conversation-analyzer` agent** to extract knowledge candidates. The agent receives signal recognition patterns and the current context digest. It runs in parallel with Step 2b.
 
 **If Agent tool is unavailable**, analyze manually in the main session.
 
-Review the current conversation to identify:
+Scan conversation for knowledge signals:
+- **Decisions:** Technology choices, architecture decisions, trade-offs accepted
+- **Patterns:** Coding conventions established, anti-patterns identified
+- **Gotchas:** Bugs with non-obvious root causes, debugging insights, things that "almost worked"
+- **Architecture changes:** New components, flows, integration points
 
-**Key Learnings:**
-- What new knowledge was gained?
-- What worked well?
-- What didn't work as expected?
-- What would you do differently?
-
-**Decisions Made:**
-- Technical choices (libraries, patterns, architecture)
-- Design decisions (UI/UX, data structures)
-- Trade-offs accepted
-- Rationale behind decisions
-
-**Patterns Discovered:**
-- Coding patterns established
-- Best practices identified
-- Anti-patterns to avoid
-- Conventions adopted
-
-**Errors & Solutions:**
-- Bugs encountered and fixed
-- Common pitfalls discovered
-- Debugging insights
-- Error handling patterns
-
-**Progress Updates:**
-- Features completed
-- Work in progress
-- Blockers resolved
-- Next steps identified
-
-Use signal recognition from `references/analysis-patterns.md` to systematically identify these.
+**Do NOT extract:**
+- Progress/status updates (handled by implement + CLAUDE.md sync rules)
+- Trivial fixes (typos, missing imports, obvious bugs)
+- One-off implementation details unlikely to recur
 
 ### 2b. Check Existing Context (Selective)
 
-**Launch a `context-reader` agent** to condense existing context into a digest. This runs in parallel with Step 2a — the two are independent.
+**Launch a `context-reader` agent** to condense existing context into a digest. This runs in parallel with Step 2a.
 
 ```
 Main → conversation-analyzer agent ───┐
      → context-reader agent ───────────┤ parallel
                                        ↓
-                                 Merge results → Steps 2c-2f
+                                 Merge results → Steps 2c-2e
 ```
 
-**If Agent tool is unavailable**, read selectively in the main session — only the files you intend to update, not all 5. Use the categorization from Step 2c to determine which files are relevant.
+**If Agent tool is unavailable**, read selectively — only the knowledge files you intend to update (brief.md, architecture.md, patterns.md).
 
-### 2c. Categorize Learnings
+### 2c. Rank and Filter
 
-Map extracted insights to appropriate files:
+Apply the **"new teammate" test**: Would you tell a new teammate joining this project about this? If not, drop it.
 
-| Category | Target File | Examples |
-|----------|-------------|----------|
-| Project goals, scope changes | `brief.md` | "Pivoted to focus on mobile-first experience" |
-| Architecture decisions, tech choices | `architecture.md` | "Switched from REST to GraphQL", diagram updates |
-| Coding patterns, conventions | `patterns.md` | "Using custom hooks for data fetching" |
-| Bug fixes, learnings, anti-patterns | `patterns.md` | "Avoid prop drilling - use Context API" |
-| Completed work, current status | `progress.md` | "Completed auth system, starting on dashboard" |
-| Current focus, blockers, next action | `state.md` | "Working on Phase 2, blocked by API design" |
+From all candidates that pass:
+1. Rank by impact (affects more code/decisions = higher rank)
+2. **Keep only top 5** — ruthlessly cut the rest
+3. Drop anything already captured in existing context
 
 ### 2d. Propose Updates
 
-For each identified learning, propose specific updates:
+Present the ranked top 5 as terse bullet entries:
 
 ```markdown
-## Proposed Updates
+## Proposed Updates (5 items, ranked by impact)
 
-### 1. [File Name] - [Section]
-**Insight:** [What was learned]
-**Proposed Addition:**
-[Exact text to add, maintaining file's existing format]
+### patterns.md
+- **Redis pub/sub for cross-service events**
+  REST polling caused 3s latency in order notifications; pub/sub solved it.
 
-**Rationale:** [Why this belongs here]
-```
+- **Prisma migrate deploy in CI**
+  `migrate dev` resets the DB; always use `migrate deploy` in non-local environments.
 
-### 2e. Ask User Confirmation
-
-Present all proposed updates and get explicit approval before applying:
-
-```
-I've analyzed our conversation and identified [N] key learnings to capture.
-
-## Proposed Updates
-
-[List all proposed updates with clear sections]
+### architecture.md
+- **Added event bus between Order and Notification services**
+  Replaces direct REST calls; enables async processing and retry.
 
 Questions:
-1. Do these updates accurately capture our learnings?
-2. Should any updates be modified, added, or removed?
-
-I'll apply the approved updates once you confirm.
+1. Approve all, or modify/remove any items?
 ```
 
-### 2f. Apply Approved Updates
+**Entry format:** Bold name + one context line (when/why it applies). Max 2 lines per entry.
+
+### 2e. Apply Approved Updates
 
 After user confirms:
 1. Read the target file
 2. Identify the correct section (or create if needed)
-3. Use Edit tool to add content in appropriate location
+3. Use Edit tool to add content in the terse bullet format
 4. Maintain existing formatting and structure
-5. Update timestamps
 
 ---
 
@@ -172,16 +137,18 @@ After user confirms:
 git diff --stat HEAD~5 2>/dev/null || git status --short
 ```
 
-Analyze for:
-- New components → `architecture.md`
-- New patterns → `patterns.md`
-- Completed work → `progress.md`
+Analyze for knowledge signals only:
+- New components or architectural changes → `architecture.md`
+- New patterns or conventions → `patterns.md`
+- Scope changes → `brief.md`
+
+Apply the same rank-and-filter (top 5, "new teammate" test).
 
 ---
 
 ## --input Mode: Interactive
 
-Ask user specific questions based on the file being updated.
+Ask user focused questions based on the target file. Apply the same budget — capture up to 5 items in terse format.
 
 ---
 
@@ -197,8 +164,7 @@ python project-context/scripts/manage_context.py update-sections --file AGENTS.m
 ## Step 3.5: Suggest Optimization (if needed)
 
 After applying updates, check if context files have grown significantly:
-- progress.md has 10+ completed items → suggest compacting: "progress.md has grown. Run `/project-context:optimize` to archive completed items."
-- Any file exceeds ~100 lines → suggest organizing: "[file] is getting large. Run `/project-context:optimize` to split into focused files."
+- Any file exceeds ~100 lines → suggest: "[file] is getting large. Run `/project-context:optimize` to split into focused files."
 
 This is a suggestion only — do not auto-run optimize.
 
@@ -207,9 +173,8 @@ This is a suggestion only — do not auto-run optimize.
 ```markdown
 Updates applied to .project-context files:
 
-- **patterns.md**: Added error handling pattern for async event handlers
-- **progress.md**: Documented authentication system completion
-- **architecture.md**: Updated auth flow diagram
+- **patterns.md**: +2 entries (Redis pub/sub, Prisma migrate)
+- **architecture.md**: +1 entry (event bus)
 
 Configuration files refreshed: CLAUDE.md, AGENTS.md
 ```
@@ -218,45 +183,54 @@ Configuration files refreshed: CLAUDE.md, AGENTS.md
 
 ## Step 5: Propagate to Downstream Dependencies
 
-If local-path downstream deps exist in `dependencies.json`, propagate relevant changes. See `references/propagation-workflow.md` for the full workflow (checking deps, relevance mapping, user confirmation, appending to downstream `state.md`).
+If local-path downstream deps exist in `dependencies.json`, propagate relevant changes. See `references/propagation-workflow.md` for the full workflow.
 
 ## Step 6: Commit Changes
 
-After all updates and propagations, offer to commit. See `references/commit-workflow.md` for the full workflow (detecting git roots, same-root vs. separate-repo commits, branch naming).
+After all updates and propagations, offer to commit. See `references/commit-workflow.md` for the full workflow.
 
-## Quality Filters
+## Knowledge Capture Rules
 
-Only capture insights that are:
-- **Actionable** — Can be applied in future work
-- **Specific** — Concrete examples, not vague generalizations
-- **Contextual** — Include when/why it applies
-- **Valuable** — Worth preserving for future reference
-- **Not trivial** — Skip obvious or one-off details
-- **Not redundant** — Don't duplicate existing context
+### The "New Teammate" Test
+Only capture knowledge that passes: "Would I tell a new teammate joining this project about this?"
+
+### Budget
+- **Max 5 items per update session**, ranked by impact
+- Each item: bold name + one context line (max 2 lines)
+- If more than 5 candidates pass the test, cut the lowest-impact ones
+
+### Quality Filters (hard gate, not suggestion)
+- **Reusable** — applies beyond this one instance
+- **Specific** — includes concrete context (when/why)
+- **Not redundant** — not already in context files
+- **Not trivial** — skip obvious fixes and one-off details
+
+### What to Capture vs Skip
+
+| Capture | Skip |
+|---------|------|
+| Architecture decisions with rationale | "Added file X" |
+| Patterns that prevent future bugs | Typo/import fixes |
+| Non-obvious gotchas and workarounds | Obvious error handling |
+| Technology choices and trade-offs | Minor refactoring |
+| Conventions that affect multiple files | One-off implementation details |
 
 ## File-Specific Guidelines
 
 ### brief.md
-Update when: Project goals/vision change, target users evolve, scope expands/contracts, core requirements shift.
+Update when: Project goals/vision change, target users evolve, scope expands/contracts.
 
 ### architecture.md
-Update when: New technology adopted, architecture patterns change, components added/modified, integration points established, flows change.
-**Always use Mermaid diagrams** with clear titles, descriptive labels, and step-by-step descriptions below.
+Update when: New technology adopted, components added/modified, flows change.
+**Always use Mermaid diagrams** with clear titles and step-by-step descriptions.
 
 ### patterns.md
-Update when: Coding pattern established, convention adopted, best practice identified, anti-pattern discovered, solution to common problem found.
+Update when: Reusable pattern established, anti-pattern discovered, convention adopted.
 **Organize by category** (Error Handling, State Management, etc.)
-
-### progress.md
-Update when: Feature completed, milestone reached, current work changes, blocker resolved, next steps identified.
-**Format:** Chronological entries with dates, clear status indicators.
-
-### state.md
-Update when: Current focus changes, active plan changes, new blockers, session context shifts.
 
 ## Step 7: Recommend Next Step
 
-After the summary and any propagation/commit steps, launch a `next-step-recommender` agent with:
+After the summary, launch a `next-step-recommender` agent with:
 - **Completed skill:** `update`
 - **Summary:** Brief description of what was updated (files modified, source mode used)
 
@@ -272,4 +246,4 @@ If Agent tool is unavailable, refer to `references/next-step-recommendations.md`
 
 ## Edge Cases & Examples
 
-For edge case templates (uncertain categorization, conflicting info, large volumes) and worked examples (feature implementation, debugging session, architecture decision), see `references/update-examples.md`.
+For edge case templates and worked examples, see `references/update-examples.md`.
