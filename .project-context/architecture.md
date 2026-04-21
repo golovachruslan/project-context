@@ -17,3 +17,30 @@ scripts/
 ## How It Works
 
 The plugin manifest (`plugin.json`) declares commands, skills, and agents. Claude Code loads these at session start. No compiled code — all behavior is defined in markdown files that Claude reads and executes as instructions.
+
+## Sibling plugin (built)
+
+`project-context-mini/` lives alongside the main plugin in this repo and ships as a second marketplace entry. It provides a leaner four-file context model (architecture, flows, patterns, status) with only two skills (`update`, `load`) and two agents (`content-extractor`, `update-critic`). Pure markdown, no scripts, no hooks. Target user projects write to `.project-context-mini/`, kept separate from parent's `.project-context/`.
+
+### Sibling structure
+
+```
+project-context-mini/
+├── .claude-plugin/plugin.json   # v0.1.0
+├── skills/
+│   ├── update/SKILL.md + references/file-scaffolds.md
+│   └── load/SKILL.md
+├── agents/
+│   ├── content-extractor/agent.md
+│   └── update-critic/agent.md
+├── README.md
+└── LICENSE
+```
+
+Declared in `.claude-plugin/marketplace.json` as the second entry in the `plugins` array.
+
+## Key Decisions
+
+- **2026-04-21** — Adopted a sibling-plugin pattern (new directory + second entry in `marketplace.json`) rather than adding a `--mini` mode to the existing plugin. Keeps the parent unchanged and lets users install only what they need.
+- **2026-04-21** — `project-context-mini` writes to a separate `.project-context-mini/` directory in user projects so both plugins can coexist without artifact conflicts.
+- **2026-04-21** — Mini plugin uses two agents (`content-extractor` + `update-critic`) for its `update` skill — the critic pass is what enforces "ruthless quality filtering" without relying on main-context self-policing.

@@ -17,6 +17,15 @@
       "author": {
         "name": "Ruslan Halavach"
       }
+    },
+    {
+      "name": "project-context-mini",
+      "source": "./project-context-mini",
+      "description": "Minimal project context for Claude Code — four lean, Mermaid-friendly files (architecture, flows, patterns, status) and two skills (update, load). Companion to the full project-context plugin.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Ruslan Halavach"
+      }
     }
   ]
 }
