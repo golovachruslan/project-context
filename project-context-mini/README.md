@@ -19,19 +19,16 @@ Both plugins can live side-by-side in the same project — they write to separat
 
 ## Install
 
-This plugin is published via the same marketplace manifest as `project-context`. Once the marketplace is added in Claude Code, enable the plugin:
+> **Status:** This plugin is not yet published to a public marketplace. It currently lives in the `project-context` repo as a sibling plugin (PR #13). To try it before release, check out the branch locally and point Claude Code's marketplace at this repo's `.claude-plugin/marketplace.json`.
+
+Once published, installation will be:
 
 ```
 /plugin install project-context-mini
-```
-
-Then reload:
-
-```
 /reload-plugins
 ```
 
-You should see `/project-context-mini:update` and `/project-context-mini:load` in the skill list.
+You should then see `/project-context-mini:update` and `/project-context-mini:load` in the skill list.
 
 ## Files
 

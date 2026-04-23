@@ -1,10 +1,13 @@
 # Current State
 
-**Phase:** `project-context-mini` built — awaiting smoke test
+**Phase:** `project-context-mini` built, PR #13 open — awaiting smoke test
 
-**Focus:** Built the sibling plugin `project-context-mini` end-to-end (Phases 1-7 of `.project-context/plans/project-context-mini-v1.md`). Plugin tree, `plugin.json`, `marketplace.json` entry, two skills (update, load), two agents (content-extractor, update-critic), scaffolds, and README are all in place. Both JSON manifests parse; tree matches plan.
+**Focus:**
+- Phases 1-7 of `project-context-mini-v1` plan complete (build + docs)
+- PR #13 open on `add-project-context-mini-plugin` branch, not yet merged
+- Phase 8 (manual smoke test) still pending
 
-**Next Action:** Run `/reload-plugins` to pick up `project-context-mini`, then drive Phase 8 smoke test: bootstrap mode on a scratch directory, `load`, make a code change, refresh mode, verify extractor + critic fire and refs-split suggestion triggers beyond ~75 lines.
+**Next Action:** `/reload-plugins` → bootstrap on scratch dir → `load` → refresh after a code change → verify extractor/critic fire and refs-split suggestion triggers past ~75 lines.
 
 **Files added:**
 - `project-context-mini/.claude-plugin/plugin.json`
