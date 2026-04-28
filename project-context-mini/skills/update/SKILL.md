@@ -1,6 +1,6 @@
 ---
 name: project-context-mini:update
-description: "Create or refresh the four lean context files in .project-context-mini/ — architecture.md, flows.md, patterns.md, status.md. Bootstraps missing files on first run. Refreshes existing files via two-agent extraction + critic pipeline. Triggers: 'update mini context', 'refresh mini', 'capture in mini', 'bootstrap mini context', 'mini init'."
+description: "Create or refresh the four lean context files in .project-context/ — architecture.md, flows.md, patterns.md, status.md. Bootstraps missing files on first run. Refreshes existing files via two-agent extraction + critic pipeline. Triggers: 'update mini context', 'refresh mini', 'capture in mini', 'bootstrap mini context', 'mini init'."
 allowed-tools:
   - Read
   - Write
@@ -14,7 +14,7 @@ allowed-tools:
 
 # Update project-context-mini
 
-Create or refresh the four context files in `.project-context-mini/`. One skill handles both bootstrap (missing files) and refresh (existing files).
+Create or refresh the four context files in `.project-context/`. One skill handles both bootstrap (missing files) and refresh (existing files).
 
 **Core discipline:** ruthlessly filter additions. Prefer rewriting to adding. Prefer removing stale content over leaving it. Mini is for essentials only.
 
@@ -35,7 +35,7 @@ Create or refresh the four context files in `.project-context-mini/`. One skill 
 ### Step 1 — Detect mode
 
 ```bash
-ls .project-context-mini/*.md 2>/dev/null
+ls .project-context/*.md 2>/dev/null
 ```
 
 - If directory missing or no `.md` files → **bootstrap mode** (Step 2)
@@ -44,7 +44,7 @@ ls .project-context-mini/*.md 2>/dev/null
 
 ### Step 2 — Bootstrap mode
 
-Goal: create `.project-context-mini/` + the four files with seeded scaffolds.
+Goal: create `.project-context/` + the four files with seeded scaffolds.
 
 1. **Read** `references/file-scaffolds.md` for templates and seed questions.
 2. **Ask the user** the five seed questions (project goal, tech stack, core user flow, current focus, upfront conventions/gotchas). Keep it one batch, not one-at-a-time.
@@ -54,10 +54,10 @@ Goal: create `.project-context-mini/` + the four files with seeded scaffolds.
    - `patterns.md` — if answer 5 yielded conventions/gotchas, add them; otherwise leave empty categories with TODO markers.
    - `status.md` — fill current focus + why + next action from answer 4.
 4. **Confirm** — show the user all four drafts together, ask for approval or edits.
-5. **Write** the approved versions to `.project-context-mini/`.
+5. **Write** the approved versions to `.project-context/`.
 6. **Skip** the agent pipeline entirely on bootstrap — extraction is meaningless against empty files.
 
-Exit bootstrap with a short summary and a suggestion to run `/project-context-mini:load` to verify.
+Exit bootstrap with a short summary and a suggestion to run `/project-context-mini:discuss` to verify.
 
 ### Step 3 — Refresh mode
 
@@ -131,12 +131,12 @@ Preserve Mermaid diagrams verbatim unless the candidate explicitly modifies one.
 After writes, check file sizes:
 
 ```bash
-wc -l .project-context-mini/architecture.md .project-context-mini/flows.md .project-context-mini/patterns.md
+wc -l .project-context/architecture.md .project-context/flows.md .project-context/patterns.md
 ```
 
 For any file > 75 lines, emit a non-blocking suggestion:
 
-> `architecture.md` is 92 lines. Consider splitting sections into `.project-context-mini/architecture/refs/<section>.md` and leaving pointers in the main file. (This is a suggestion only — not auto-applied.)
+> `architecture.md` is 92 lines. Consider splitting sections into `.project-context/architecture/refs/<section>.md` and leaving pointers in the main file. (This is a suggestion only — not auto-applied.)
 
 Do not auto-create refs/. User runs the split manually or asks in a follow-up turn.
 
@@ -147,7 +147,7 @@ Do not auto-create refs/. User runs the split manually or asks in a follow-up tu
 Emit a terse summary:
 
 ```
-Updated .project-context-mini/:
+Updated .project-context/:
   architecture.md — 1 addition (new Kafka topic)
   patterns.md — 1 rewrite (retry convention)
 Rejected 4 candidates (see above)

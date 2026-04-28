@@ -1,6 +1,6 @@
 # File scaffolds
 
-Starter templates for the four `.project-context-mini/` files. Used by the `update` skill in bootstrap mode. Keep each scaffold short — users see `<TODO>` markers and fill them in.
+Starter templates for the four `.project-context/` files. Used by the `update` skill in bootstrap mode. Keep each scaffold short — users see `<TODO>` markers and fill them in.
 
 ---
 

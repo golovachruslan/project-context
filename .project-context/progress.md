@@ -19,12 +19,20 @@
   - `agents/content-extractor/agent.md` (ranked extraction, JSON output)
   - `agents/update-critic/agent.md` (7-rule ruthless filter, JSON output)
   - `README.md` (install + four-file model + coexistence table)
+- [x] **2026-04-27** — `project-context-mini` v2 implemented on branch `project-context-mini-v2`:
+  - Artifact dir consolidated: `.project-context-mini/` → `.project-context/` (mutually exclusive with parent per project)
+  - `skills/load/` renamed to `skills/discuss/` with full SKILL.md rewrite
+  - `discuss` lazy-loads refs (lists paths, does not read content)
+  - Optional topic `$ARGUMENTS` passes through into the closing framing prompt
+  - `plugin.json` bumped to v0.2.0, description updated
+  - README rewritten: install caveat, collision warning, updated coexistence table, discuss skill docs
+  - Plan: `.project-context/plans/project-context-mini-v2.md`
 
 ## In Progress
 
-- [ ] **2026-04-21** — `project-context-mini` Phase 8 (manual smoke test): `/reload-plugins`, bootstrap on scratch dir, load, make code change, refresh, verify refs-split suggestion.
+- [ ] **2026-04-27** — `project-context-mini` v2: open PR, run `/reload-plugins`, smoke test (bootstrap, discuss with/without topic, refs lazy-loading).
 
 ## Next
 
 - [ ] Publish parent `project-context` plugin to Claude Code marketplace
-- [ ] If `project-context-mini` smoke test passes, add it to marketplace publish plan
+- [ ] If `project-context-mini` v2 smoke test passes, add it to marketplace publish plan
