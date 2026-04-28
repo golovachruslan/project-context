@@ -1,13 +1,14 @@
 # Current State
 
-**Phase:** `project-context-mini` built, PR #13 open — awaiting smoke test
+**Phase:** `project-context-mini` v2 implemented on branch `project-context-mini-v2` — awaiting PR + smoke test
 
 **Focus:**
-- Phases 1-7 of `project-context-mini-v1` plan complete (build + docs)
-- PR #13 open on `add-project-context-mini-plugin` branch, not yet merged
-- Phase 8 (manual smoke test) still pending
+- Path: `.project-context-mini/` → `.project-context/` (same dir as parent; one plugin per project)
+- Skill rename: `load` → `discuss`, with optional topic argument
+- Refs are now lazy: `discuss` lists paths only, agent reads on demand
+- Plugin bumped to v0.2.0; static checks pass (JSON valid, no stale paths or `:load` refs)
 
-**Next Action:** `/reload-plugins` → bootstrap on scratch dir → `load` → refresh after a code change → verify extractor/critic fire and refs-split suggestion triggers past ~75 lines.
+**Next Action:** Open PR for v2 changes → run `/reload-plugins` → smoke test bootstrap + discuss + lazy-refs behavior on a scratch project.
 
 **Files added:**
 - `project-context-mini/.claude-plugin/plugin.json`
