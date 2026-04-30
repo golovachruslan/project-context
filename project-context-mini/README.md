@@ -1,6 +1,6 @@
 # project-context-mini
 
-Minimal project context for Claude Code. Four lean, Mermaid-friendly files and two skills. Companion to the full [`project-context`](../project-context) plugin — pick one per project, not both.
+Minimal project context for Claude Code. Four lean, Mermaid-friendly files, an optional dependency manifest, and four skills. Companion to the full [`project-context`](../project-context) plugin — pick one per project, not both.
 
 ## When to use
 
@@ -13,9 +13,11 @@ Use **`project-context-mini`** when you want just enough context for an AI agent
 
 No session-state tracking, no brainstorming workflow, no planning pipeline, no CLAUDE.md sync — just the essentials an incoming agent needs to be useful.
 
-Use the full [`project-context`](../project-context) plugin when you need session continuity, planning workflows, federated dependency graphs, brainstorm/challenge/implement cycles, or CLAUDE.md management.
+Mini also supports lightweight dependencies (git repos, monorepo siblings, raw doc URLs) via `dependency:add` + `dependency:load` — see below.
 
-> **Important:** Both plugins write to `.project-context/`. They will overwrite each other's `architecture.md` and `patterns.md`. **Use one or the other per project.**
+Use the full [`project-context`](../project-context) plugin when you need session continuity, planning workflows, brainstorm/challenge/implement cycles, CLAUDE.md management, or richer dependency federation (upstream/downstream split, reciprocal updates).
+
+> **Important:** Both plugins write to `.project-context/`. They will overwrite each other's `architecture.md`, `patterns.md`, and `dependencies.json`. **Use one or the other per project.**
 
 ## Install
 
@@ -28,7 +30,7 @@ Once published, installation will be:
 /reload-plugins
 ```
 
-You should then see `/project-context-mini:update` and `/project-context-mini:discuss` in the skill list.
+You should then see `/project-context-mini:update`, `/project-context-mini:discuss`, `/project-context-mini:dependency:add`, and `/project-context-mini:dependency:load` in the skill list.
 
 ## Files
 
@@ -96,6 +98,37 @@ Examples:
 
 Run it at the start of a session, or whenever you want to focus the agent on a specific area.
 
+### `/project-context-mini:dependency:add <source>`
+
+Registers an external source this project depends on by appending an entry to `.project-context/dependencies.json`. **Does not fetch** — pure manifest update.
+
+Three source types are accepted:
+
+| Type | Example | What it points at |
+|------|---------|-------------------|
+| `git` | `https://github.com/org/shared.git` | A repo whose `.project-context/` we want |
+| `path` | `../sibling-app` | A monorepo sibling whose `.project-context/` we want |
+| `url` | `https://example.com/rfc-001.md` | A single doc to keep alongside this project |
+
+The skill detects the type from the source string and prompts for: name (with inferred default), `ref` (git only, default `main`), and optional `what` / `note` fields.
+
+### `/project-context-mini:dependency:load [name]`
+
+Fetches content for everything in `dependencies.json` (or just `<name>`). For `git` deps, sparse-checks-out only the remote's `.project-context/` — no source code. For `path` deps, copies the sibling's `.project-context/`. For `url` deps, downloads the single file.
+
+Loaded content lands under `.project-context/dependencies/<name>/`. The directory is **auto-gitignored** — content is treated as a regenerable cache, not committed.
+
+```
+.project-context/
+├── dependencies.json          ← committed
+└── dependencies/              ← gitignored
+    ├── .gitignore
+    ├── shared/{*.md, .fetch-meta.json}
+    └── rfc-001/{001-event-format.md, .fetch-meta.json}
+```
+
+Re-running `load` is safe and idempotent — each dep's subdirectory is wiped and re-populated.
+
 ## Agents
 
 Both agents are for the `update` skill's refresh mode:
@@ -110,14 +143,15 @@ No agents are involved in `discuss` — reading four small files is cheap in the
 | | `project-context` | `project-context-mini` |
 |---|---|---|
 | Context directory | `.project-context/` | `.project-context/` (same!) |
-| Files | brief, architecture, patterns, state, progress, dependencies, plans/ | architecture, flows, patterns, status |
-| Overlapping filenames | `architecture.md`, `patterns.md` | `architecture.md`, `patterns.md` |
-| Skills | 14 (brainstorm, plan, implement, update, load, challenge, resume, save, next, optimize, init, ask, project-context, add-dependency) | 2 (update, discuss) |
+| Files | brief, architecture, patterns, state, progress, dependencies, plans/ | architecture, flows, patterns, status, dependencies |
+| Overlapping filenames | `architecture.md`, `patterns.md`, `dependencies.json` | `architecture.md`, `patterns.md`, `dependencies.json` |
+| Skills | 14 (brainstorm, plan, implement, update, load, challenge, resume, save, next, optimize, init, ask, project-context, add-dependency) | 4 (update, discuss, dependency:add, dependency:load) |
+| Dependency mechanism | upstream/downstream split, reciprocal updates, Python fetch helper, `.deps-cache/` | flat list, no reciprocal updates, bash-only sparse-checkout, `dependencies/` |
 | Agents | 7 | 2 |
 | CLAUDE.md sync | yes | no |
 | Hooks | optional | none |
 
-**They collide on `architecture.md` and `patterns.md`.** Pick one plugin per project. If you start with mini and outgrow it, run `project-context:init` and re-author from the existing files. If you start with the full plugin and want to slim down, the four mini files are subsets of what the full plugin already produces.
+**They collide on `architecture.md`, `patterns.md`, and `dependencies.json`.** Pick one plugin per project. If you start with mini and outgrow it, run `project-context:init` and re-author from the existing files. If you start with the full plugin and want to slim down, the four mini files are subsets of what the full plugin already produces.
 
 ## License
 

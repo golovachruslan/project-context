@@ -1,7 +1,7 @@
 {
   "name": "project-context-mini",
-  "version": "0.2.0",
-  "description": "Minimal project context for Claude Code — four lean, Mermaid-friendly files (architecture, flows, patterns, status) in .project-context/ and two skills (update, discuss). Companion to the full project-context plugin.",
+  "version": "0.3.0",
+  "description": "Minimal project context for Claude Code — four lean, Mermaid-friendly files (architecture, flows, patterns, status) in .project-context/ plus a lightweight dependency manifest. Skills: update, discuss, dependency:add, dependency:load. Companion to the full project-context plugin.",
   "author": {
     "name": "Ruslan Halavach",
     "email": "golovachruslan@gmail.com"
@@ -18,7 +18,8 @@
     "architecture",
     "user-flows",
     "patterns",
-    "status"
+    "status",
+    "dependencies"
   ],
   "skills": "./skills"
 }
