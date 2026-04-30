@@ -20,16 +20,16 @@ The plugin manifest (`plugin.json`) declares commands, skills, and agents. Claud
 
 ## Sibling plugin (built)
 
-`project-context-mini/` lives alongside the main plugin in this repo and ships as a second marketplace entry. It provides a leaner four-file context model (architecture, flows, patterns, status) with only two skills (`update`, `load`) and two agents (`content-extractor`, `update-critic`). Pure markdown, no scripts, no hooks. Target user projects write to `.project-context-mini/`, kept separate from parent's `.project-context/`.
+`project-context-mini/` lives alongside the main plugin in this repo and ships as a second marketplace entry. It provides a leaner four-file context model (architecture, flows, patterns, status) with only two skills (`update`, `discuss`) and two agents (`content-extractor`, `update-critic`). Pure markdown, no scripts, no hooks. Target user projects write to `.project-context/` — same directory as the parent plugin, so the two are mutually exclusive per project.
 
 ### Sibling structure
 
 ```
 project-context-mini/
-├── .claude-plugin/plugin.json   # v0.1.0
+├── .claude-plugin/plugin.json   # v0.2.0
 ├── skills/
 │   ├── update/SKILL.md + references/file-scaffolds.md
-│   └── load/SKILL.md
+│   └── discuss/SKILL.md
 ├── agents/
 │   ├── content-extractor/agent.md
 │   └── update-critic/agent.md
@@ -42,5 +42,7 @@ Declared in `.claude-plugin/marketplace.json` as the second entry in the `plugin
 ## Key Decisions
 
 - **2026-04-21** — Adopted a sibling-plugin pattern (new directory + second entry in `marketplace.json`) rather than adding a `--mini` mode to the existing plugin. Keeps the parent unchanged and lets users install only what they need.
-- **2026-04-21** — `project-context-mini` writes to a separate `.project-context-mini/` directory in user projects so both plugins can coexist without artifact conflicts.
 - **2026-04-21** — Mini plugin uses two agents (`content-extractor` + `update-critic`) for its `update` skill — the critic pass is what enforces "ruthless quality filtering" without relying on main-context self-policing.
+- **2026-04-27** — Mini writes to `.project-context/` (same dir as parent), reversing the v1 separate-dir decision. Trade-off accepted: the two plugins collide on `architecture.md` and `patterns.md`, so users pick one per project. Reduces friction for mini-only users who expect the standard location.
+- **2026-04-27** — Renamed `load` skill to `discuss` and added an optional topic argument. Signals intent (priming for a discussion) and the topic shapes the closing framing prompt.
+- **2026-04-27** — `discuss` lazy-loads refs: reads the four main files in full, lists `<file>/refs/*.md` paths only, and lets the agent read a specific ref on demand. Prevents context bloat as refs accumulate.
