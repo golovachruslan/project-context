@@ -18,6 +18,8 @@ Create or refresh the four context files in `.project-context/`. One skill handl
 
 **Core discipline:** ruthlessly filter additions. Prefer rewriting to adding. Prefer removing stale content over leaving it. Mini is for essentials only.
 
+**Clarify before acting:** if anything is ambiguous — which file to target, which mode to run, how to interpret a candidate, which of conflicting signals to trust, or which option to pick at any branching step — use the `AskUserQuestion` tool to ask the user before proceeding. Prefer one batched question with concrete options over guessing or asking one-at-a-time. Do not fabricate intent.
+
 ## Arguments
 
 - `file` (optional) — target a single file
