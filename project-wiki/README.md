@@ -75,6 +75,10 @@ Self-maintenance. Finds broken links, orphans, pages missing `sources:`, over-bu
 
 Run any of them standalone: `python3 scripts/wiki_lint.py <vault>`.
 
+## Works with the Obsidian CLI
+
+When you have the official [Obsidian CLI](https://obsidian.md/cli) (v1.12.4+) and the app open, project-wiki gets better at search automatically — `wiki_search.py` routes through `obsidian search` and falls back to BM25 otherwise (see above). It does **not** reimplement the CLI: the vault is plain markdown, so for richer interactive vault operations install the companion [`kepano/obsidian-skills` → `obsidian-cli`](https://github.com/kepano/obsidian-skills/blob/main/skills/obsidian-cli/SKILL.md) skill (by Obsidian's maintainer), which teaches the agent the documented commands (`read`, `create … template=`, `append`, `property:set`, `backlinks`, `tasks`, …). project-wiki owns the *workflow and schema*; the obsidian-cli skill supplies the *CLI mechanics*; the stdlib scripts are the *headless floor* when no app is running. None is required — everything degrades gracefully.
+
 ## Design choices
 
 - **Compilation over retrieval** — a maintained index, with search (Obsidian CLI when the app is open, else built-in BM25) as the scale fallback, deliberately *not* a vector DB. Right for ~handful of projects and hundreds of pages.

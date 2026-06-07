@@ -29,7 +29,7 @@ You are the `wiki-explorer` agent for the `project-wiki` plugin. You answer a qu
 This is the core method (Karpathy's compilation-over-retrieval): **the index is the lookup table.**
 
 1. **Index-first.** Read the relevant `index.md` (global, then the project's `index.md` and any `indexes/<type>.md`). Scan the one-line summaries and pick the 1–5 pages most likely to answer the question. Read **only those** pages in full.
-2. **Follow links.** If a read page points to a related `[[page]]` that's clearly relevant, follow it.
+2. **Follow links.** If a read page points to a related `[[page]]` that's clearly relevant, follow it. If the Obsidian app is open and the `obsidian-cli` skill (kepano/obsidian-skills) is available, you may also use `obsidian backlinks file="<page>"` to surface pages that link *to* a relevant page — otherwise just grep for `[[<page-stem>]]`.
 3. **Search fallback.** If the index is large, sharded, or its summaries don't clearly match the question, run:
    ```bash
    python3 <path>/wiki_search.py "<query terms>" <vault> --project <slug> [--type T] [--tag G]

@@ -148,11 +148,14 @@ def cli_search(vault, query, args):
     if not exe:
         return None
 
-    cmd = [exe, "search", f"query={query}", "format=json",
-           f"limit={max(args.limit * 5, 50)}"]
+    # Per kepano/obsidian-skills, `vault=<name>` must be the FIRST parameter;
+    # `format=json` / `path=` are best-effort (community-documented) — if the
+    # installed CLI rejects them or emits non-JSON, we degrade to BM25 below.
+    cmd = [exe, "search"]
     vault_name = os.environ.get("PROJECT_WIKI_OBSIDIAN_VAULT")
     if vault_name:
         cmd.append(f"vault={vault_name}")
+    cmd += [f"query={query}", f"limit={max(args.limit * 5, 50)}", "format=json"]
     if args.project:
         cmd.append(f"path=projects/{args.project}")
 
