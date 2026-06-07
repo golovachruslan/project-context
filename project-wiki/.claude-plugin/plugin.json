@@ -1,0 +1,24 @@
+{
+  "name": "project-wiki",
+  "version": "0.1.0",
+  "description": "Obsidian-friendly, multi-project LLM knowledge wiki for Claude Code — ingest raw info from any source (Slack, email, PDFs, docs), auto-route it to the right project, and compile it into a self-maintaining, cross-linked markdown wiki. Implements Karpathy's LLM-wiki pattern (raw → wiki → schema, compilation over retrieval). Companion to project-context.",
+  "author": {
+    "name": "Ruslan Halavach",
+    "email": "golovachruslan@gmail.com"
+  },
+  "repository": "https://github.com/golovachruslan/project-context",
+  "license": "MIT",
+  "keywords": [
+    "knowledge-base",
+    "wiki",
+    "obsidian",
+    "llm-wiki",
+    "karpathy",
+    "project-management",
+    "ingest",
+    "multi-project",
+    "markdown",
+    "second-brain"
+  ],
+  "skills": "./skills"
+}

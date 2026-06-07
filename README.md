@@ -117,3 +117,13 @@ Cache entries older than 7 days are flagged as stale in `list-deps`.
 ```
 
 This format is 100% compatible with the [project-context Claude Code plugin](https://github.com/golovachruslan/project-context).
+
+---
+
+## Claude Code plugins in this repo
+
+This repo also publishes a small marketplace (`.claude-plugin/marketplace.json`) of Claude Code plugins:
+
+- **[project-context](./project-context)** — structured project context across sessions: brainstorm-first workflow, planning, federated dependency graph, smart routing.
+- **[project-context-mini](./project-context-mini)** — the lean four-file companion (architecture, flows, patterns, status).
+- **[project-wiki](./project-wiki)** — Obsidian-friendly, multi-project **LLM knowledge wiki**: ingest raw info from any source (Slack, email, PDFs, docs), auto-route it to the right project, and compile it into a self-maintaining, cross-linked markdown wiki (Karpathy's LLM-wiki pattern, index-first + BM25, no vector DB).

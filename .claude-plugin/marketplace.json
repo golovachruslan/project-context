@@ -26,6 +26,15 @@
       "author": {
         "name": "Ruslan Halavach"
       }
+    },
+    {
+      "name": "project-wiki",
+      "source": "./project-wiki",
+      "description": "Obsidian-friendly, multi-project LLM knowledge wiki — ingest raw info from any source (Slack, email, PDFs, docs), auto-route it to the right project, and compile it into a self-maintaining, cross-linked markdown wiki. Implements Karpathy's LLM-wiki pattern with index-first navigation and BM25 search.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Ruslan Halavach"
+      }
     }
   ]
 }
