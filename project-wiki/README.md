@@ -70,14 +70,14 @@ Self-maintenance. Finds broken links, orphans, pages missing `sources:`, over-bu
 ## Scripts (`scripts/`, pure stdlib Python 3.10+)
 
 - **`wiki_lint.py`** — tiered health check (broken links, orphans, missing `sources:`, budgets, shard thresholds).
-- **`wiki_search.py`** — frontmatter-filtered BM25 search (`--type` / `--tag` / `--since`). No embeddings, no vector DB.
+- **`wiki_search.py`** — frontmatter-filtered search (`--type` / `--tag` / `--since`). Auto-uses the **official [Obsidian CLI](https://obsidian.md/cli)** (same ranked index as the app's search pane) when an Obsidian instance is reachable for the vault, and falls back to a built-in **BM25** ranker otherwise — so it works headless too. No embeddings, no vector DB either way. Set `PROJECT_WIKI_OBSIDIAN_VAULT=<name>` to target a registered vault, or `PROJECT_WIKI_USE_OBSIDIAN=0` to force BM25.
 - **`wiki_stats.py`** — page/link counts, density, orphans, which scaling threshold is approaching.
 
 Run any of them standalone: `python3 scripts/wiki_lint.py <vault>`.
 
 ## Design choices
 
-- **Compilation over retrieval** — a maintained index + BM25 fallback, deliberately *not* a vector DB. Right for ~handful of projects and hundreds of pages.
+- **Compilation over retrieval** — a maintained index, with search (Obsidian CLI when the app is open, else built-in BM25) as the scale fallback, deliberately *not* a vector DB. Right for ~handful of projects and hundreds of pages.
 - **Obsidian-native dependencies** — `[[wikilinks]]` + a `dependencies.md` graph; Obsidian's graph view is the relational layer. No graph database to keep in sync.
 - **Hard size budgets, relocate-never-delete** — hot files stay scannable; overflow moves to an archive/wiki page with a `[[link]]`. `raw/` keeps every source verbatim.
 - **Mandatory source citations + surgical, re-read-the-raw updates** — guards against the LLM-wiki failure modes (silent corruption, output drift).

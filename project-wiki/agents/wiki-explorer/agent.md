@@ -30,11 +30,11 @@ This is the core method (Karpathy's compilation-over-retrieval): **the index is 
 
 1. **Index-first.** Read the relevant `index.md` (global, then the project's `index.md` and any `indexes/<type>.md`). Scan the one-line summaries and pick the 1–5 pages most likely to answer the question. Read **only those** pages in full.
 2. **Follow links.** If a read page points to a related `[[page]]` that's clearly relevant, follow it.
-3. **BM25 fallback.** If the index is large, sharded, or its summaries don't clearly match the question, run:
+3. **Search fallback.** If the index is large, sharded, or its summaries don't clearly match the question, run:
    ```bash
    python3 <path>/wiki_search.py "<query terms>" <vault> --project <slug> [--type T] [--tag G]
    ```
-   Read the top-ranked pages it returns.
+   This auto-selects its backend: it uses the **official Obsidian CLI** (same ranked index as the app's search pane) when an Obsidian instance is reachable for this vault, and transparently falls back to a built-in **BM25** ranker otherwise — so it works headless too. The output's `backend:` line tells you which ran. Read the top-ranked pages it returns.
 4. **Provenance only when needed.** The compiled wiki page is the answer. Open the cited `raw/` source only to verify a specific claim or quote — not by default.
 
 ## Answering

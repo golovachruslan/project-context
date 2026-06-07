@@ -30,11 +30,13 @@ If `--project` is set, use it. Otherwise infer the project(s) from the global `i
 
 ## Step 2 — Explore
 
-Launch the **`wiki-explorer`** agent with the question, the vault path, the target project slug(s), and the path to `wiki_search.py`. It navigates **index-first** (catalog summaries → read only the candidate pages), and falls back to BM25:
+Launch the **`wiki-explorer`** agent with the question, the vault path, the target project slug(s), and the path to `wiki_search.py`. It navigates **index-first** (catalog summaries → read only the candidate pages), and falls back to search at scale:
 
 ```bash
 python3 ${CLAUDE_PLUGIN_ROOT}/scripts/wiki_search.py "<terms>" <vault> --project <slug> [--type T] [--tag G] [--since YYYY-MM-DD]
 ```
+
+`wiki_search.py` picks its backend automatically: the **official Obsidian CLI** (`obsidian search`) when an Obsidian instance is reachable for this vault — same ranked index you see in the app — otherwise a built-in **BM25** ranker so it still works headless (web/CI/cloned vault). No setup needed; to point the CLI at a specific registered vault set `PROJECT_WIKI_OBSIDIAN_VAULT=<name>`, or set `PROJECT_WIKI_USE_OBSIDIAN=0` to force BM25.
 
 For a simple, single-project question you may navigate inline instead of dispatching the agent — reading a couple of small pages is cheap.
 
