@@ -30,7 +30,7 @@ If `--project` is set, use it. Otherwise infer the project(s) from the global `i
 
 ## Step 2 — Explore
 
-Launch the **`wiki-explorer`** agent with the question, the vault path, the target project slug(s), and the path to `wiki_search.py`. It navigates **index-first** (catalog summaries → read only the candidate pages), and falls back to search at scale:
+Launch the **`wiki-explorer`** agent with the question, the vault path, the target project slug(s), and the path to `wiki_search.py`. It navigates **index-first** (catalog summaries → read only the candidate pages), and falls back to search at scale. For people questions ("who is X / how do I reach X / who owns Y"), it scans the vault-level `people/index.md` and reads the matching `people/+<slug>.md` profile (a `[[+name]]` citation is a person):
 
 ```bash
 python3 ${CLAUDE_PLUGIN_ROOT}/scripts/wiki_search.py "<terms>" <vault> --project <slug> [--type T] [--tag G] [--since YYYY-MM-DD]

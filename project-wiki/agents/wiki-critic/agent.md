@@ -49,6 +49,15 @@ Reject one-off chatter with no reusable lesson. A wiki page should still be usef
 ### Rule 7 — Respects size budgets
 If applying a candidate would push a target wiki page over its hard cap (800 lines) — or a hot file (`_project.md` 60, `progress.md` 80) over budget — keep the candidate but set `"requires_relocation": true` so the skill splits/relocates instead of bloating.
 
+## People candidates (`type: person`)
+
+Person profiles are vault-level reference cards (`people/+<slug>.md`), so apply the rules with this nuance:
+
+- **Existence is allowed to be thin** — a profile that just records who someone is and how to reach them earns its place; don't reject it under Rule 1/6 for lacking deep "knowledge."
+- **Contact details must be grounded** — a proposed `slack`/`email`/`role` must come from the source (Rule 3 still applies to *facts*); reject invented contact info, keep the rest.
+- **Prefer update over create (Rule 5) hard** — if a profile (or an `aliases:` match) already exists, downgrade to `update`. Never allow two profiles for the same person.
+- Person pages are exempt from the mandatory `sources:` rule, so do **not** reject a person candidate solely for lacking a `sources:` block — judge it on grounded facts and non-duplication.
+
 ## Output format
 
 Return **only** a JSON object — no prose, no code fence:

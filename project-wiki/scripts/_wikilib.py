@@ -8,11 +8,17 @@ A "vault" is a directory laid out as:
 
     <vault>/
       index.md, log.md, dependencies.md, CLAUDE.md, AGENTS.md
+      people/+<name>.md             (vault-level person profiles)
+      people/index.md               (people catalog)
       projects/<slug>/
         _project.md, index.md, progress.md, refs.md
         indexes/<type>.md           (optional, sharded indexes)
         raw/<date>-<slug>.md        (immutable sources)
         wiki/<type>/<page>.md       (compiled knowledge pages)
+
+People are linked with a `+` prefix, e.g. `[[+jane-smith]]`, which resolves to
+`people/+jane-smith.md` (the `+` is part of the filename, so the existing
+basename index resolves it with no special handling).
 """
 
 import re
@@ -30,7 +36,19 @@ WIKI_PAGE_SOFT = 400
 WIKI_PAGE_HARD = 800
 INDEX_PAGE_SHARD_COUNT = 150            # shard once a project exceeds this many pages
 
+PEOPLE_DIR = "people"                   # vault-level person profiles: people/+<name>.md
+
 WIKILINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
+
+
+def is_person_link(token):
+    """True if a wikilink token addresses a person profile (e.g. `+jane-smith`)."""
+    return token.startswith("+")
+
+
+def person_slug(token):
+    """Strip the leading `+` person marker from a link token / filename stem."""
+    return token.lstrip("+")
 
 
 # ---------------------------------------------------------------------------
@@ -152,6 +170,18 @@ def iter_wiki_pages(vault, project=None):
             continue
         for p in sorted(wiki.rglob("*.md")):
             yield p
+
+
+def iter_people(vault):
+    """Yield Path for each vault-level person profile (people/+*.md), skipping
+    the catalog (people/index.md)."""
+    pdir = Path(vault) / PEOPLE_DIR
+    if not pdir.is_dir():
+        return
+    for p in sorted(pdir.glob("*.md")):
+        if p.name == "index.md":
+            continue
+        yield p
 
 
 def iter_all_markdown(vault):

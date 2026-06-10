@@ -29,7 +29,7 @@ The vault is a **separate git repo** from any code project. Resolve in order:
 Run when the resolved path has no `index.md` / `projects/`.
 
 1. Read `references/vault-scaffolds.md`.
-2. Create the structure: `index.md`, `log.md`, `dependencies.md`, `_templates/{project,wiki-page,raw-source}.md`, and an empty `projects/` directory.
+2. Create the structure: `index.md`, `log.md`, `dependencies.md`, `_templates/{project,wiki-page,raw-source,person}.md`, `people/index.md` (people catalog), and an empty `projects/` directory.
 3. **CLAUDE.md and AGENTS.md (managed sections):** for each, insert/refresh the `<!-- PROJECT-WIKI:START -->…<!-- PROJECT-WIKI:END -->` block from the scaffolds reference.
    - If the file exists: replace only the block between the markers (or append the block if absent). **Everything outside the markers is left byte-for-byte intact.**
    - If the file doesn't exist: create it containing just the block.
