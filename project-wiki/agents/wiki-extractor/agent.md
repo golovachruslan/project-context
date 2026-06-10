@@ -29,11 +29,13 @@ You are the `wiki-extractor` agent for the `project-wiki` plugin. You convert **
 Compiled pages live in typed subfolders under `projects/<slug>/wiki/`:
 
 - `concepts/` — ideas, patterns, findings, how-something-works
-- `entities/` — domain objects, services, systems, people
+- `entities/` — domain objects, services, systems (non-human)
 - `poc/` — proof-of-concept writeups, experiments and their outcomes
 - `decisions/` — decision records (what was decided, why, alternatives)
 - `notes/` — anything worth keeping that isn't the above
 - `sources/` — the one-paragraph summary of this raw source (the ingest skill usually creates this; only propose edits if needed)
+
+**People are not project pages — they are vault-level.** A named individual gets a profile at `people/+<slug>.md` (kebab-cased, with the literal `+`), linked as `[[+<slug>]]`. See below.
 
 ## What to extract
 
@@ -45,6 +47,15 @@ Read the raw source and propose candidates that capture **durable, reusable know
 - New cross-project relationships revealed by the source (flag these explicitly).
 
 For each candidate decide: **does this belong on an existing page (update) or a new page (create)?** Prefer updating an existing page when one covers the topic.
+
+## People (`type: person`)
+
+When the source names an individual who plays a role (owner, contact, decision-maker, author) or reveals their contact details:
+
+- Emit a candidate with `type: "person"` and `target: "people/+<slug>.md"` (vault-level, kebab-cased name). Capture `slack`, `email`, `role`, and `team` **only when the source states them** — leave unknown fields out; never invent contact info.
+- **Prefer update over create.** First check `people/index.md` and existing `people/+*.md` (read their `aliases:` — nicknames, @handles, email local-parts). If the person already has a profile, emit an `update` that adds the new detail; do not create a duplicate.
+- In your *other* candidates, reference people inline with `[[+<slug>]]` (e.g. "Owned by [[+jane-smith]]") rather than spelling out a bare name.
+- A person's `sources:` quote should support their involvement/role; contact metadata comes verbatim from the source.
 
 ## Mandatory citation
 

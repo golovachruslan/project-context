@@ -83,9 +83,11 @@ def main():
             continue
         per_project.append(stats_for_project(args.vault, proj))
 
+    people = len(list(wl.iter_people(args.vault)))
     summary = {
         "vault": str(Path(args.vault).resolve()),
         "projects": len(per_project),
+        "people": people,
         "total_pages": sum(p["pages"] for p in per_project),
         "total_raw_sources": sum(p["raw_sources"] for p in per_project),
         "per_project": per_project,
@@ -95,7 +97,8 @@ def main():
         print(json.dumps(summary, indent=2))
     else:
         print(f"Vault: {summary['vault']}")
-        print(f"Projects: {summary['projects']}  Total pages: {summary['total_pages']}  "
+        print(f"Projects: {summary['projects']}  People: {summary['people']}  "
+              f"Total pages: {summary['total_pages']}  "
               f"Raw sources: {summary['total_raw_sources']}\n")
         for p in per_project:
             print(f"  {p['project']}: {p['pages']} pages, {p['raw_sources']} raw, "

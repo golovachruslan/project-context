@@ -37,6 +37,8 @@ This is the core method (Karpathy's compilation-over-retrieval): **the index is 
    This auto-selects its backend: it uses the **official Obsidian CLI** (same ranked index as the app's search pane) when an Obsidian instance is reachable for this vault, and transparently falls back to a built-in **BM25** ranker otherwise — so it works headless too. The output's `backend:` line tells you which ran. Read the top-ranked pages it returns.
 4. **Provenance only when needed.** The compiled wiki page is the answer. Open the cited `raw/` source only to verify a specific claim or quote — not by default.
 
+**People.** Profiles live at vault level in `people/+<slug>.md`; `people/index.md` is the catalog. A `[[+name]]` link/citation is a person. For "who is X / how do I reach X / who owns Y" questions, scan `people/index.md` and read the relevant `people/+<slug>.md` for contact metadata (slack, email, role, team).
+
 ## Answering
 
 - Synthesize a direct answer to the question.

@@ -25,7 +25,11 @@ This is an LLM-maintained knowledge wiki (Karpathy LLM-wiki pattern). **Compile,
 - `index.md` (global) — every project, one-line summary, `[[link]]`.
 - `dependencies.md` — cross-project relationships (mermaid graph + list).
 - `log.md` — append-only op log (ingest/query/lint), newest last.
+- `people/` (vault-level) — one profile per person, `people/+<name>.md`; `people/index.md` is the catalog.
 - `projects/<slug>/`: `_project.md` (hub), `index.md` (page catalog), `progress.md` (current state), `refs.md` (external refs), `raw/`, `wiki/{sources,concepts,entities,poc,decisions,notes}/`.
+
+### People (`[[+name]]`)
+People are first-class and **vault-level** (a person spans projects). Link a person from any page with a `+` prefix — `[[+jane-smith]]` — which resolves to `people/+jane-smith.md`. Each profile is a reference card: `type: person` frontmatter with contact metadata (`slack`, `email`, `role`, `team`, `aliases`, `projects`). Profiles are **exempt from the mandatory `sources:` rule** (cite sources only for durable claims). Keep one profile per person; use `aliases` (nicknames, @handles, email local-parts) to match mentions instead of creating duplicates.
 
 ### Finding things
 Start at `index.md` → open the project's `_project.md` → use `index.md`/`indexes/` one-line summaries to pick pages → read only those. For large projects use `wiki_search.py` (BM25). Open `raw/` only to verify provenance.
@@ -56,6 +60,7 @@ Shorter pointer (same markers):
 
 LLM-maintained knowledge wiki. Read `CLAUDE.md` for the full schema. In short:
 - `projects/<slug>/raw/` = immutable sources; `projects/<slug>/wiki/` = compiled, `[[wikilinked]]` pages.
+- `people/+<name>.md` = vault-level person profiles; link people with `[[+name]]`. Profiles carry contact metadata (slack/email) and are exempt from the `sources:` rule.
 - Find info: `index.md` → project `_project.md` → page catalog → read only the pages you need; `wiki_search.py` for scale.
 - Every wiki page cites a raw source (`sources:` frontmatter). Compile, don't re-retrieve.
 <!-- PROJECT-WIKI:END -->
@@ -98,6 +103,16 @@ graph LR
 
 ## Edges
 <!-- - [[projects/<a>/_project]] → [[projects/<b>/_project]] -->
+```
+
+### `people/index.md`
+```markdown
+# People
+
+Vault-level profiles. Link a person from any page with `[[+<slug>]]`.
+
+<!-- one line per person: -->
+- [[+<slug>]] — <role>, <team>
 ```
 
 ---
@@ -153,6 +168,34 @@ project: <slug>
 ---
 
 <verbatim source content — never edited after archiving>
+```
+
+### `_templates/person.md`
+Vault-level profile. File is named with the `+` prefix and kebab-cased: `people/+<slug>.md` (e.g. `people/+jane-smith.md`), linked as `[[+jane-smith]]`.
+```markdown
+---
+type: person
+name: "<Full Name>"
+aliases: []          # nicknames, @handles, email local-parts — help match mentions
+slack: "<@handle>"
+email: "<addr>"
+role: "<title / what they do>"
+team: "<team or org>"
+projects: []         # project slugs this person is involved in
+tags: [person]
+updated: <YYYY-MM-DD>
+status: active
+---
+
+# <Full Name>
+
+<one line: who they are>
+
+## Context
+- <where they show up / what they own — link [[projects/<slug>/_project]] and [[pages]]>
+
+## Notes
+- <durable: responsibilities, timezone, preferences>
 ```
 
 ---

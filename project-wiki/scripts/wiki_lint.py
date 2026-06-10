@@ -139,8 +139,33 @@ def lint(vault, project=None, stale_days=DEFAULT_STALE_DAYS):
                 for t in targets:
                     inbound[t] = inbound.get(t, 0) + 1
 
+    # ---- person profiles (vault-level people/) ----------------------------
+    # People pages are reference cards, not compiled claims: they are exempt
+    # from the mandatory `sources:` rule (and never appear in iter_wiki_pages).
+    # We still validate their outgoing links and count inbound links to them.
+    for person in wl.iter_people(vault):
+        rel = wl.relpath(vault, person)
+        text = wl.read_text(person)
+        meta, _ = wl.parse_frontmatter(text)
+
+        if str(meta.get("type", "")) != "person":
+            _add(issues, "suggestion", rel,
+                 "person profile missing `type: person` frontmatter.")
+        if not (wl.has_value(meta, "slack") or wl.has_value(meta, "email")):
+            _add(issues, "suggestion", rel,
+                 "person profile has no contact field (`slack` or `email`).")
+
+        for token in wl.extract_wikilinks(text):
+            targets = link_index.get(token)
+            if not targets:
+                _add(issues, "critical", rel, f"broken wikilink: [[{token}]]")
+            else:
+                for t in targets:
+                    inbound[t] = inbound.get(t, 0) + 1
+
     # ---- broken links from hub files (dependencies live in _project.md) ----
-    hub_files = [vault / "dependencies.md", vault / "index.md"]
+    hub_files = [vault / "dependencies.md", vault / "index.md",
+                 vault / wl.PEOPLE_DIR / "index.md"]
     for proj in wl.iter_projects(vault):
         if project and proj.name != project:
             continue

@@ -61,6 +61,7 @@ Group kept candidates by target page. For each show: action (create/update), the
 For each approved candidate:
 - **create** → `Write` a new page under the correct typed folder with full frontmatter (including `sources:` and `updated: <today>`).
 - **update** → **re-read the target page AND its cited raw source**, then `Edit` the specific section. Do not rewrite the whole page.
+- **person** (`type: person`) → write/update `people/+<slug>.md` at the **vault level** (not under a project) from the `_templates/person.md` template; fill only the contact fields the source provided. Add or refresh the person's `- [[+<slug>]] — <role>, <team>` line in `people/index.md`. In wiki pages that mention the person, link them with `[[+<slug>]]`.
 - Add/refresh the page's one-line entry in the project `index.md` (or the matching `indexes/<type>.md` if sharded).
 - If a new project page was created, add it to the global `index.md`.
 - If a candidate carried `cross_project`, add the `[[projects/<other>/_project]]` link to both `_project.md` files' `## Dependencies` sections and note that `dependencies.md` should be regenerated (lint `--fix`).
