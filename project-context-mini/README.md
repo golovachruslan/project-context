@@ -67,22 +67,24 @@ When `architecture.md`, `flows.md`, or `patterns.md` grows past a soft threshold
 
 Creates or refreshes the four files.
 
-**Bootstrap (first run):** detects missing files, asks 5 seed questions (project goal, tech stack, core user flow, current focus, any upfront conventions/gotchas), and writes scaffolds you can approve or edit.
+**Bootstrap (first run):** scans the repo first (manifests, directory layout, README) to prefill tech stack and components, then asks the user only what the scan couldn't answer — confirm the scan, core user flow, current focus, and any optional conventions/gotchas. Writes scaffolds you approve or edit.
 
-**Refresh (subsequent runs):** runs two subagents:
+**Refresh (subsequent runs):** a hybrid pipeline, not a flat two-subagent run:
 
-1. **`content-extractor`** — scans the current conversation + recent `git diff` for signals worth capturing. Over-generates deliberately.
-2. **`update-critic`** — ruthlessly filters the candidates. Its default stance is rejection. It enforces a hard cap of 3 items per file and zero redundancy with existing content.
+1. **Chat extraction (inline, main session)** — the main agent already has the conversation, so it scans it directly for signals worth capturing. A subagent can't see the chat.
+2. **`content-extractor` agent (scan source)** — scans `git diff` since the last commit that touched `.project-context/` (falls back to `HEAD~5` if none yet). Git/scan-only; never sees the conversation. Both extraction paths over-generate deliberately.
+3. **`update-critic` agent** — always runs, filtering the merged candidate list. Its default stance is rejection. It enforces a hard cap of 3 items per file and zero redundancy with existing content.
 
-You see only the filtered set, with the critic's rejection reasons for anything cut, and you approve per-item before writes happen.
+Chat and scan sources can both be active in one run; candidates from both that point at the same thing get merged into one, corroboration raises the impact score. You see only the filtered set, with the critic's rejection reasons for anything cut, and you approve per-item before writes happen.
 
-Flags: `--chat` / `--scan` / `--input` to pick the source explicitly, `--bootstrap` / `--refresh` to force a mode.
+Flags: `--chat` / `--scan` / `--input` pick the sources directly (chat and scan can both be set at once), `--bootstrap` / `--refresh` force a mode.
 
 ### `/project-context-mini:discuss [topic]`
 
 Primes the agent for a discussion of the project.
 
-- Reads all four main files in full, inline into the session.
+- Reads all four main files in full, inline into the session — that reading is the priming.
+- Does **not** re-emit file contents. Output is a compact manifest (file / sections / line counts), not a restatement of what was just read.
 - Lists any `<file>/refs/*.md` paths it discovers, but does **not** read their contents — refs are lazy. The agent reads a specific ref via the Read tool when the conversation calls for that detail.
 - Optional `topic` argument (free-form) shapes the closing framing line. It does not filter which main files are loaded.
 
@@ -100,8 +102,8 @@ Run it at the start of a session, or whenever you want to focus the agent on a s
 
 Both agents are for the `update` skill's refresh mode:
 
-- **`content-extractor`** — scans for signals (architecture shifts, flow changes, new patterns, gotchas, status pivots) across conversation + git. Returns ranked candidates as JSON.
-- **`update-critic`** — applies a 7-rule hard filter (new-teammate test, not-a-framework-default, not-already-captured, generalizes-beyond-one-instance, prefer-rewriting-to-adding, Mermaid-first respected, patterns categorized). Returns kept set + rejection reasons.
+- **`content-extractor`** — git/scan-only, it never sees the conversation. Scans `git diff` since the last commit that touched `.project-context/` for signals (architecture shifts, flow changes, new patterns, gotchas, status pivots). Returns ranked candidates as JSON. Chat-side extraction happens inline in the main session instead, since only the main agent has the conversation.
+- **`update-critic`** — always runs on the merged candidate list (chat + scan). Applies a 7-rule hard filter (new-teammate test, not-a-framework-default, not-already-captured, generalizes-beyond-one-instance, prefer-rewriting-to-adding, Mermaid-first respected, patterns categorized). Returns kept set + rejection reasons.
 
 No agents are involved in `discuss` — reading four small files is cheap in the main session.
 

@@ -1,6 +1,6 @@
 ---
-name: project-context-mini:discuss
-description: "Prime the agent for a discussion of this project. Reads the four .project-context/ mini files inline and lists any refs/ files (lazy — content not loaded). Optional topic argument focuses the framing prompt. Triggers: 'discuss the project', 'prime me on this project', 'load mini context to discuss', 'onboard me with mini'."
+name: discuss
+description: "Prime the agent for a discussion of this project. Reads the four .project-context/ mini files into context and lists any refs/ files (lazy — content not loaded). Optional topic argument focuses the framing prompt. Triggers: 'discuss the project', 'prime me on this project', 'load mini context to discuss', 'onboard me with mini'."
 allowed-tools:
   - Read
   - Glob
@@ -9,7 +9,9 @@ allowed-tools:
 
 # Discuss project-context-mini
 
-Read the four `.project-context/` mini files inline so the agent is primed to discuss the project. Refs are *listed*, not read — the agent reads a specific ref on demand if the conversation requires that detail.
+Read the four `.project-context/` mini files so the agent is primed to discuss the project. Refs are *listed*, not read — the agent reads a specific ref on demand if the conversation requires that detail.
+
+**Do not re-emit file contents in your output.** Reading the files already puts them in context — repeating them verbatim doubles the token cost and buries the user in text they wrote. Output is a compact manifest + framing line only.
 
 ## Arguments
 
@@ -40,6 +42,8 @@ Read in full, in this order:
 
 If any of the four is missing, note it in the output but continue with the rest.
 
+Reading is the priming — the contents are now in context. Do not summarize, compress, or restate them.
+
 ### Step 3 — List refs (do not read)
 
 ```bash
@@ -52,24 +56,19 @@ If a ref's H1 is cheap to fetch (e.g., `head -1 <path>`), include it as a one-li
 
 Group refs under their parent file (architecture / flows / patterns). If no refs exist, omit the section entirely.
 
-### Step 4 — Emit structured digest
+### Step 4 — Emit compact manifest
 
-Output the four main files inline with Mermaid diagrams preserved verbatim. Then a refs manifest. Then a framing prompt.
+Output a short table of what was loaded — file, its H2 sections, line count — followed by the refs manifest (if any) and the framing prompt. Do **not** include file contents.
 
 ```markdown
 ## Project Context Mini — Loaded
 
-### Status
-<contents of status.md>
-
-### Architecture
-<contents of architecture.md>
-
-### User Flows
-<contents of flows.md>
-
-### Patterns
-<contents of patterns.md>
+| File | Sections | Lines |
+|------|----------|-------|
+| status.md | Current Focus, Next Action | 13 |
+| architecture.md | Diagram, Components, Tech Stack | 32 |
+| flows.md | Onboarding, Checkout | 44 |
+| patterns.md | Conventions, Gotchas | 13 |
 
 <if any refs were found:>
 ### Available refs (lazy — read on demand)
@@ -82,12 +81,8 @@ Output the four main files inline with Mermaid diagrams preserved verbatim. Then
 
 **patterns/**
 - `.project-context/patterns/refs/<name>.md` — <hint>
-
-Read any of these with the Read tool when the conversation requires that detail.
 </if>
 ```
-
-Preserve all Mermaid code fences exactly. Do not summarize, compress, or reorder sections within a file.
 
 ### Step 5 — Framing prompt
 
@@ -103,22 +98,22 @@ Where `<topic>` is the literal `$ARGUMENTS` value as the user passed it.
 Emit terse notes only if one of these conditions is true:
 
 - Any main file is empty or has only TODO markers → "`<file>` is empty — run `/project-context-mini:update` to populate."
-- Any main file exceeds 120 lines → "`<file>` is getting large (>120 lines). Consider splitting into `<file>/refs/`."
+- Any main file exceeds 75 lines → "`<file>` is getting large (>75 lines). Run `/project-context-mini:update` and ask for a refs-split."
 - `status.md` was last modified more than 14 days ago (check with `stat -f %m` / `stat -c %Y`) → "`status.md` is stale — focus may have shifted."
 
 If none apply, emit no health notes. Silence is the default.
 
 ## What this skill does NOT do
 
+- Does not re-emit or summarize file contents — reading them is the priming; output is manifest-only.
 - Does not read refs/ contents — listing only. The agent reads a specific ref via the Read tool when it needs that detail.
-- No digest, no compression, no summarization of main files.
 - No subagent dispatch — reading four small files is cheap in the main session.
 - No interactive Q&A loop — emit the framing prompt and stop.
 - Topic argument does **not** filter which files are loaded; it only shapes the framing line.
 
 ## Edge cases
 
-- **Only some main files exist** — emit what's present, note what's missing, suggest `update`.
-- **Files are scaffold-only (TODO markers everywhere)** — emit them anyway, but lead with: "Mini context is bootstrapped but not populated. Consider `/project-context-mini:update --input` to fill in."
+- **Only some main files exist** — read what's present, note what's missing in the manifest, suggest `update`.
+- **Files are scaffold-only (TODO markers everywhere)** — still read them, but lead with: "Mini context is bootstrapped but not populated. Consider `/project-context-mini:update --input` to fill in."
 - **Refs exist but the corresponding main file is missing** — list the refs anyway; the agent decides whether to read them.
 - **Topic argument is multi-word** — pass it through verbatim; do not parse or interpret it.
