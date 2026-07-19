@@ -109,12 +109,11 @@ No history log. No blockers section unless a blocker is load-bearing for the cur
 
 ## Bootstrap seed questions
 
-When `update` runs in bootstrap mode, ask the user these to pre-fill scaffolds:
+When `update` runs in bootstrap mode, it first scans the repo (manifest files, directory layout, README) to prefill the tech stack, components, and project-goal hints. Then ask the user only what the scan cannot answer, in one batched question:
 
-1. **Project goal** — one sentence on what this project is and who uses it.
-2. **Tech stack** — primary language, framework, storage.
-3. **Core user flow** — the single most important journey a user takes.
-4. **Current focus** — what are you actively working on right now?
-5. **Upfront conventions or gotchas** (optional) — anything an incoming teammate should know on day one?
+1. **Confirm the scan** — "Here's what I found: <stack, components, goal hint>. Anything wrong or missing?"
+2. **Core user flow** — the single most important journey a user takes.
+3. **Current focus** — what are you actively working on right now?
+4. **Upfront conventions or gotchas** (optional) — anything an incoming teammate should know on day one?
 
 Keep follow-ups minimal. If the user answers briefly, accept brief scaffolds — the `update` skill can deepen them later.
